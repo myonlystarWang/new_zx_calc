@@ -34,13 +34,13 @@ export const AttributeCard: React.FC<AttributeCardProps> = ({
     };
 
     return (
-        <div className="glass-panel p-4 flex flex-col gap-3 hover:border-cyan-500/30 transition-all duration-300 animate-fade-in">
-            {/* Icon & Label */}
-            <div className="flex items-center gap-2">
-                <div className={clsx('p-1.5 rounded-lg bg-slate-800/50 transition-transform hover:scale-110', iconColor)}>
+        <div className="glass-panel p-4 flex flex-col gap-3 hover:border-cyan-500/30 transition-all duration-300 animate-fade-in group">
+            {/* Header: Icon & Label Centered Row */}
+            <div className="flex items-center justify-center gap-3">
+                <div className={clsx('p-2 rounded-lg bg-slate-800/50 transition-transform group-hover:scale-110 shadow-sm shrink-0', iconColor)}>
                     {icon}
                 </div>
-                <span className="text-xs font-medium text-slate-400">{label}</span>
+                <span className="text-sm font-bold text-slate-300 tracking-wide whitespace-nowrap">{label}</span>
             </div>
 
             {/* Large Number Display */}
@@ -51,7 +51,7 @@ export const AttributeCard: React.FC<AttributeCardProps> = ({
                 min={min}
                 max={max}
                 step={step}
-                className="bg-transparent text-xl font-bold text-white w-full focus:outline-none focus:text-cyan-400 transition-colors"
+                className="bg-transparent text-2xl font-black text-white w-full text-center focus:outline-none focus:text-cyan-400 transition-colors py-1"
                 style={{ fontVariantNumeric: 'tabular-nums' }}
             />
 
