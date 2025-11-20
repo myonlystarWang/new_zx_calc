@@ -1,0 +1,50 @@
+[
+    {
+        "Rank": "SSS",
+        "MinPower": 500000,
+        "Color": "from-yellow-400 to-orange-500",
+        "Shadow": "shadow-orange-500/50",
+        "Border": "border-yellow-300/50",
+        "TextColor": "text-yellow-100"
+    },
+    {
+        "Rank": "SS",
+        "MinPower": 300000,
+        "Color": "from-purple-400 to-fuchsia-600",
+        "Shadow": "shadow-purple-500/50",
+        "Border": "border-purple-300/50",
+        "TextColor": "text-purple-100"
+    },
+    {
+        "Rank": "S",
+        "MinPower": 100000,
+        "Color": "from-red-400 to-rose-600",
+        "Shadow": "shadow-red-500/50",
+        "Border": "border-red-300/50",
+        "TextColor": "text-red-100"
+    },
+    {
+        "Rank": "A",
+        "MinPower": 50000,
+        "Color": "from-blue-400 to-cyan-600",
+        "Shadow": "shadow-blue-500/50",
+        "Border": "border-blue-300/50",
+        "TextColor": "text-blue-100"
+    },
+    {
+        "Rank": "B",
+        "MinPower": 10000,
+        "Color": "from-emerald-400 to-green-600",
+        "Shadow": "shadow-emerald-500/50",
+        "Border": "border-emerald-300/50",
+        "TextColor": "text-emerald-100"
+    },
+    {
+        "Rank": "C",
+        "MinPower": 0,
+        "Color": "from-slate-400 to-slate-600",
+        "Shadow": "shadow-slate-500/50",
+        "Border": "border-slate-300/50",
+        "TextColor": "text-slate-100"
+    }
+]
