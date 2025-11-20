@@ -9,7 +9,8 @@ interface AttributeRadarChartProps {
 export const AttributeRadarChart: React.FC<AttributeRadarChartProps> = ({ attributes }) => {
     // 定义每个属性的颜色
     const attributeColors = {
-        '攻击': '#06b6d4', // cyan
+        // '攻击': '#06b6d4', // cyan 
+        '攻击': '#a855f7', // purple
         '防御': '#10b981', // emerald
         '气血': '#ef4444', // red
         '真气': '#3b82f6', // blue

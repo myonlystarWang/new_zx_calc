@@ -106,25 +106,25 @@ export const AttributePanel: React.FC<AttributePanelProps> = ({ attributes, onCh
             </Card>
 
             {/* Formula Description */}
-            <Card title="计算公式说明" className="bg-slate-800/50">
+            {/* <Card title="计算公式说明" className="bg-slate-800/50">
                 <div className="text-sm text-slate-400 space-y-2">
                     <div>
                         <strong className="text-cyan-400">基础伤害：</strong>
-                        (角色攻击 × (1 + 技能百分比)) + 技能固定值 + (气血/真气/防御 × 对应百分比)
+                        (角色攻击 × (1 + 技能攻击百分比)) + 技能攻击固定值 + (气血/真气/防御 × 技能对应百分比)
                     </div>
                     <div>
                         <strong className="text-purple-400">最终伤害：</strong>
-                        基础伤害 × 暴击倍率 × 技能倍率 × 对怪增伤 × 各种增益
+                        基础伤害 × 暴伤增益 × 对怪增益 × 伤害增加增益 × 专注增益 × 怪物受到伤害增益 × 巫咒增益
                     </div>
                     <div>
                         <strong className="text-yellow-400">战力评分：</strong>
                         Σ(技能平均伤害 × 权重) → 副本平均 → 加权总分
                     </div>
                 </div>
-            </Card>
+            </Card> */}
 
             {/* Buff Explanation */}
-            <Card title="增益说明" className="bg-slate-800/50">
+            {/* <Card title="增益说明" className="bg-slate-800/50">
                 <div className="text-sm text-slate-400 space-y-3">
                     <div>
                         <strong className="text-pink-400">专注增益：</strong>
@@ -148,18 +148,19 @@ export const AttributePanel: React.FC<AttributePanelProps> = ({ attributes, onCh
                         </p>
                     </div>
                 </div>
-            </Card>
+            </Card> */}
 
             {/* Dungeon Data Explanation */}
-            <Card title="副本数据说明" className="bg-slate-800/50">
+            <Card title="使用说明" className="bg-slate-800/50">
                 <div className="text-sm text-slate-400 space-y-3">
                     <div>
                         <strong className="text-cyan-400">副本战力计算：</strong>
                         <p className="mt-1 ml-4">基于当前角色属性、技能配置和增益状态，计算对各副本怪物的平均输出能力。</p>
                     </div>
                     <div>
-                        <strong className="text-purple-400">怪物差异：</strong>
-                        <p className="mt-1 ml-4">不同副本的怪物有不同的等级和暴击伤害减免。高级副本怪物减免更高，需要更高的属性才能打出有效伤害。</p>
+                        <strong className="text-purple-400">战力评分：</strong>
+                        {/* <p className="mt-1 ml-4">不同副本的怪物有不同的暴击伤害减免。高级副本怪物减免更高，需要更高的属性才能打出有效伤害。</p> */}
+                        <p className="mt-1 ml-4">Σ(技能平均伤害 × 权重) → 副本平均 → 加权总分。</p>
                     </div>
                     <div>
                         <strong className="text-yellow-400">技能权重：</strong>
@@ -167,7 +168,8 @@ export const AttributePanel: React.FC<AttributePanelProps> = ({ attributes, onCh
                     </div>
                     <div>
                         <strong className="text-green-400">综合评分：</strong>
-                        <p className="mt-1 ml-4">综合战力是所有副本战力的加权平均值。评级标准：SSS(50万+) &gt; SS(30万+) &gt; S(10万+) &gt; A(5万+) &gt; B(1万+) &gt; C</p>
+                        <p className="mt-1 ml-4">综合战力是所有副本战力的加权平均值。</p>
+                        {/* 评级标准：SSS(50万+) &gt; SS(30万+) &gt; S(10万+) &gt; A(5万+) &gt; B(1万+) &gt; C */}
                     </div>
                     <div className="pt-2 border-t border-slate-700/50">
                         <p className="text-xs text-slate-500">

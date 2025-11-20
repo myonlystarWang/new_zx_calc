@@ -10,7 +10,7 @@ import clsx from 'clsx';
 const RANK_CONFIGS = [
     {
         Rank: 'SSS',
-        MinPower: 500000,
+        MinPower: 500000000,
         Color: 'bg-yellow-500/5',
         Shadow: 'shadow-[0_0_20px_rgba(250,204,21,0.6),inset_0_0_10px_rgba(250,204,21,0.1)]',
         Border: 'border-2 border-yellow-400',
@@ -19,7 +19,7 @@ const RANK_CONFIGS = [
     },
     {
         Rank: 'SS',
-        MinPower: 300000,
+        MinPower: 100000000,
         Color: 'bg-purple-500/5',
         Shadow: 'shadow-[0_0_20px_rgba(168,85,247,0.6),inset_0_0_10px_rgba(168,85,247,0.1)]',
         Border: 'border-2 border-purple-500',
@@ -28,7 +28,7 @@ const RANK_CONFIGS = [
     },
     {
         Rank: 'S',
-        MinPower: 100000,
+        MinPower: 10000000,
         Color: 'bg-red-500/5',
         Shadow: 'shadow-[0_0_15px_rgba(239,68,68,0.6),inset_0_0_10px_rgba(239,68,68,0.1)]',
         Border: 'border-2 border-red-500',
@@ -37,7 +37,7 @@ const RANK_CONFIGS = [
     },
     {
         Rank: 'A',
-        MinPower: 50000,
+        MinPower: 1000000,
         Color: 'bg-cyan-500/5',
         Shadow: 'shadow-[0_0_15px_rgba(34,211,238,0.6),inset_0_0_10px_rgba(34,211,238,0.1)]',
         Border: 'border-2 border-cyan-400',
@@ -46,7 +46,7 @@ const RANK_CONFIGS = [
     },
     {
         Rank: 'B',
-        MinPower: 10000,
+        MinPower: 100000,
         Color: 'bg-emerald-500/5',
         Shadow: 'shadow-[0_0_10px_rgba(52,211,153,0.5),inset_0_0_5px_rgba(52,211,153,0.1)]',
         Border: 'border-2 border-emerald-400',

@@ -51,7 +51,7 @@ export const AttributeCard: React.FC<AttributeCardProps> = ({
                 min={min}
                 max={max}
                 step={step}
-                className="bg-transparent text-2xl font-black text-white w-full text-center focus:outline-none focus:text-cyan-400 transition-colors py-1"
+                className="bg-transparent text-xl font-black text-white w-full text-center focus:outline-none focus:text-cyan-400 transition-colors py-1"
                 style={{ fontVariantNumeric: 'tabular-nums' }}
             />
 
