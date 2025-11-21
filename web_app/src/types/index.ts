@@ -3,6 +3,7 @@ export interface CharacterClass {
   ClassID: string;
   ClassName: string;
   Description: string;
+  Race: string;
 }
 
 export interface CharacterAttributes {
