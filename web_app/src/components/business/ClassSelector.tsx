@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
-import { User, X, ChevronRight } from 'lucide-react';
+import { DataService } from '../../services/DataService';
+import { User, X, ChevronRight, Lock } from 'lucide-react';
 import clsx from 'clsx';
 
 const RACES = ['人族', '神族', '天脉', '苍祇'];
@@ -12,8 +13,10 @@ export const ClassSelector: React.FC = () => {
 
     // Find current class object
     const currentClass = classes.find(c => c.ClassID === userCharacter.ClassID);
+    const service = DataService.getInstance();
 
-    const handleClassSelect = (classId: string) => {
+    const handleClassSelect = (classId: string, isSupported: boolean) => {
+        if (!isSupported) return;
         updateCharacterClass(classId, userCharacter.Faction);
         setIsModalOpen(false);
     };
@@ -108,12 +111,16 @@ export const ClassSelector: React.FC = () => {
                                     .filter(cls => cls.Race === activeTab)
                                     .map(cls => {
                                         const isActive = userCharacter.ClassID === cls.ClassID;
+                                        const skills = service.getSkills(cls.ClassID);
+                                        const isSupported = !!skills && Object.keys(skills).length > 0;
+
                                         return (
                                             <div
                                                 key={cls.ClassID}
-                                                onClick={() => handleClassSelect(cls.ClassID)}
+                                                onClick={() => handleClassSelect(cls.ClassID, isSupported)}
                                                 className={clsx(
-                                                    'glass-panel p-3 md:p-4 cursor-pointer transition-all duration-300 hover:border-blue-500/50 group relative overflow-hidden flex flex-col items-center gap-2 md:gap-3',
+                                                    'glass-panel p-3 md:p-4 transition-all duration-300 group relative overflow-hidden flex flex-col items-center gap-2 md:gap-3',
+                                                    isSupported ? 'cursor-pointer hover:border-blue-500/50' : 'cursor-not-allowed opacity-50 grayscale',
                                                     isActive
                                                         ? 'border-blue-500/70 bg-blue-500/10 shadow-[0_0_15px_rgba(59,130,246,0.15)]'
                                                         : 'border-slate-700 hover:bg-slate-800/50'
@@ -125,7 +132,7 @@ export const ClassSelector: React.FC = () => {
                                                         ? 'bg-blue-500/20 text-blue-400 scale-110 shadow-[0_0_15px_rgba(59,130,246,0.4)]'
                                                         : 'bg-slate-800/50 text-slate-400 group-hover:bg-slate-700/50'
                                                 )}>
-                                                    <User className="w-5 h-5 md:w-6 md:h-6" />
+                                                    {isSupported ? <User className="w-5 h-5 md:w-6 md:h-6" /> : <Lock className="w-5 h-5 md:w-6 md:h-6" />}
                                                 </div>
 
                                                 <span className={clsx(
@@ -134,6 +141,12 @@ export const ClassSelector: React.FC = () => {
                                                 )}>
                                                     {cls.ClassName}
                                                 </span>
+
+                                                {!isSupported && (
+                                                    <span className="absolute top-2 right-2 text-[10px] bg-slate-800 text-slate-500 px-1.5 py-0.5 rounded border border-slate-700">
+                                                        未开放
+                                                    </span>
+                                                )}
 
                                                 {isActive && (
                                                     <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-80" />

@@ -89,30 +89,28 @@ export const DungeonDetail: React.FC<DungeonDetailProps> = ({ dungeon, isExpande
                                             <th className="text-right py-2 px-3 text-slate-400 font-medium">最小伤害</th>
                                             <th className="text-right py-2 px-3 text-slate-400 font-medium">最大伤害</th>
                                             <th className="text-right py-2 px-3 text-slate-400 font-medium">平均伤害</th>
-                                            <th className="text-right py-2 px-3 text-slate-400 font-medium">权重</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {skills.map((skill) => {
-                                            const dmg = calculateDamage(userCharacter.BaseAttributes, skill, monster, activeBuffs, buffValues);
-                                            return (
-                                                <tr key={skill.SkillID} className="border-b border-slate-700/30 hover:bg-slate-800/20">
-                                                    <td className="py-2 px-3 text-slate-300">{skill.SkillName}</td>
-                                                    <td className="py-2 px-3 text-right text-cyan-300 font-mono">
-                                                        {formatDamage(dmg.minFinalDamage)}
-                                                    </td>
-                                                    <td className="py-2 px-3 text-right text-purple-300 font-mono">
-                                                        {formatDamage(dmg.maxFinalDamage)}
-                                                    </td>
-                                                    <td className="py-2 px-3 text-right text-yellow-300 font-mono font-semibold">
-                                                        {formatDamage(dmg.avgFinalDamage)}
-                                                    </td>
-                                                    <td className="py-2 px-3 text-right text-slate-400 text-xs">
-                                                        {skill.SkillImportanceWeight.toFixed(2)}
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
+                                        {[...skills]
+                                            .sort((a, b) => b.SkillImportanceWeight - a.SkillImportanceWeight)
+                                            .map((skill) => {
+                                                const dmg = calculateDamage(userCharacter.BaseAttributes, skill, monster, activeBuffs, buffValues);
+                                                return (
+                                                    <tr key={skill.SkillID} className="border-b border-slate-700/30 hover:bg-slate-800/20">
+                                                        <td className="py-2 px-3 text-slate-300">{skill.SkillName}</td>
+                                                        <td className="py-2 px-3 text-right text-cyan-300 font-mono">
+                                                            {formatDamage(dmg.minFinalDamage)}
+                                                        </td>
+                                                        <td className="py-2 px-3 text-right text-purple-300 font-mono">
+                                                            {formatDamage(dmg.maxFinalDamage)}
+                                                        </td>
+                                                        <td className="py-2 px-3 text-right text-yellow-300 font-mono font-semibold">
+                                                            {formatDamage(dmg.avgFinalDamage)}
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
                                     </tbody>
                                 </table>
                             </div>
