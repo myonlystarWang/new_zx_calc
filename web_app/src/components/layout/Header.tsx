@@ -3,7 +3,7 @@ import { Calculator } from 'lucide-react';
 
 export const Header: React.FC = () => {
     return (
-        <header className="w-full py-4 md:py-6 mb-6 md:mb-8 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50 shadow-lg shadow-slate-900/50">
+        <header className="w-full py-4 md:py-6 mb-6 md:mb-8 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-[100] shadow-lg shadow-slate-900/50">
             <div className="container mx-auto px-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-xl border border-cyan-500/30 shadow-lg shadow-cyan-500/20">
