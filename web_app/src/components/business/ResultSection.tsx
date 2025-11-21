@@ -1,43 +1,42 @@
-import React, { useMemo, useState, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useApp } from '../../context/AppContext';
 import { DataService } from '../../services/DataService';
 import { calculateDungeonPower, calculateTotalPower } from '../../utils/calculator';
-import { Trophy, Copy, Sparkles, Swords } from 'lucide-react';
-import { DungeonDetail } from './DungeonDetail';
+import { Trophy, Sparkles, Copy } from 'lucide-react';
 import clsx from 'clsx';
+import { DungeonDetail } from './DungeonDetail';
 
-// Define rank config directly in code to ensure Tailwind classes are generated
 const RANK_CONFIGS = [
     {
         Rank: 'SSS',
-        MinPower: 500000000,
+        Threshold: 500000000, // 2000万
         Color: 'bg-yellow-500/10',
-        Shadow: 'shadow-[0_0_20px_rgba(250,204,21,0.4)]',
+        Shadow: 'shadow-[0_0_20px_rgba(234,179,8,0.4)]',
         Border: 'border-yellow-400',
         TextColor: 'text-yellow-400',
-        Glow: 'animate-pulse-glow'
+        Glow: 'drop-shadow-[0_0_10px_rgba(234,179,8,0.6)]'
     },
     {
         Rank: 'SS',
-        MinPower: 100000000,
+        Threshold: 100000000, // 1000万
         Color: 'bg-purple-500/10',
-        Shadow: 'shadow-[0_0_20px_rgba(168,85,247,0.4)]',
-        Border: 'border-purple-500',
+        Shadow: 'shadow-[0_0_15px_rgba(168,85,247,0.4)]',
+        Border: 'border-purple-400',
         TextColor: 'text-purple-400',
-        Glow: ''
+        Glow: 'drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]'
     },
     {
         Rank: 'S',
-        MinPower: 10000000,
-        Color: 'bg-red-500/10',
-        Shadow: 'shadow-[0_0_15px_rgba(239,68,68,0.4)]',
-        Border: 'border-red-500',
-        TextColor: 'text-red-400',
-        Glow: ''
+        Threshold: 10000000, // 500万
+        Color: 'bg-blue-500/10',
+        Shadow: 'shadow-[0_0_15px_rgba(59,130,246,0.4)]',
+        Border: 'border-blue-400',
+        TextColor: 'text-blue-400',
+        Glow: 'drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]'
     },
     {
         Rank: 'A',
-        MinPower: 1000000,
+        Threshold: 1000000,
         Color: 'bg-cyan-500/10',
         Shadow: 'shadow-[0_0_15px_rgba(34,211,238,0.4)]',
         Border: 'border-cyan-400',
@@ -46,7 +45,7 @@ const RANK_CONFIGS = [
     },
     {
         Rank: 'B',
-        MinPower: 100000,
+        Threshold: 100000,
         Color: 'bg-emerald-500/10',
         Shadow: 'shadow-[0_0_10px_rgba(52,211,153,0.4)]',
         Border: 'border-emerald-400',
@@ -55,7 +54,7 @@ const RANK_CONFIGS = [
     },
     {
         Rank: 'C',
-        MinPower: 0,
+        Threshold: 0,
         Color: 'bg-slate-500/10',
         Shadow: 'shadow-none',
         Border: 'border-slate-500',
@@ -85,12 +84,12 @@ export const ResultSection: React.FC = () => {
             );
             return {
                 ...dungeon,
-                power
+                TotalDamage: power // Ensure TotalDamage is set for compatibility
             };
         });
 
         const totalPower = calculateTotalPower(
-            dungeonPowers.map(d => d.power),
+            dungeonPowers.map(d => d.TotalDamage),
             dungeonPowers.map(() => 1)
         );
 
@@ -108,7 +107,7 @@ export const ResultSection: React.FC = () => {
     }, [results.dungeonPowers, selectedDungeonId]);
 
     const getRankConfig = (power: number) => {
-        return RANK_CONFIGS.find(c => power >= c.MinPower) || RANK_CONFIGS[RANK_CONFIGS.length - 1];
+        return RANK_CONFIGS.find(c => power >= c.Threshold) || RANK_CONFIGS[RANK_CONFIGS.length - 1];
     };
 
     const formatDamage = (damage: number, withUnit: boolean = true): string => {
@@ -130,7 +129,39 @@ export const ResultSection: React.FC = () => {
         navigator.clipboard.writeText(text);
     };
 
-    const selectedDungeon = results.dungeonPowers.find(d => d.DungeonID === selectedDungeonId);
+    const touchStartX = useRef<number | null>(null);
+    const touchEndX = useRef<number | null>(null);
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        touchEndX.current = null;
+        touchStartX.current = e.targetTouches[0].clientX;
+    };
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        touchEndX.current = e.targetTouches[0].clientX;
+    };
+
+    const handleTouchEnd = () => {
+        if (!touchStartX.current || !touchEndX.current) return;
+
+        const distance = touchStartX.current - touchEndX.current;
+        const isLeftSwipe = distance > 50;
+        const isRightSwipe = distance < -50;
+
+        if (isLeftSwipe) {
+            const currentIndex = results.dungeonPowers.findIndex(d => d.DungeonID === selectedDungeonId);
+            if (currentIndex < results.dungeonPowers.length - 1) {
+                setSelectedDungeonId(results.dungeonPowers[currentIndex + 1].DungeonID);
+            }
+        }
+
+        if (isRightSwipe) {
+            const currentIndex = results.dungeonPowers.findIndex(d => d.DungeonID === selectedDungeonId);
+            if (currentIndex > 0) {
+                setSelectedDungeonId(results.dungeonPowers[currentIndex - 1].DungeonID);
+            }
+        }
+    };
 
     return (
         <div className="flex flex-col gap-6">
@@ -197,95 +228,93 @@ export const ResultSection: React.FC = () => {
                 </div>
             </div>
 
-            {/* Dungeon Navigator Carousel (3D Coverflow) */}
+            {/* Dungeon Navigator Carousel (3D Stack) */}
             <div className="relative w-full flex flex-col items-center gap-4">
                 <h3 className="text-base font-semibold text-slate-100 flex items-center gap-2 px-1 self-start">
                     <span className="w-1 h-4 bg-gradient-to-b from-cyan-500 to-purple-500 rounded-full"></span>
                     副本战力分析
                 </h3>
 
-                <div className="relative w-full h-[280px] flex items-center justify-center overflow-hidden perspective-1000">
+                <div
+                    className="relative w-full h-[600px] flex items-center justify-center perspective-1000 touch-pan-y overflow-hidden"
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                >
                     {/* Cards Container */}
-                    <div className="relative w-full h-full flex items-center justify-center">
+                    <div className="relative w-full h-full flex items-center justify-center transform-style-3d">
                         {results.dungeonPowers.map((d, index) => {
-                            const activeIndex = results.dungeonPowers.findIndex(item => item.DungeonID === selectedDungeonId);
+                            const isActive = d.DungeonID === selectedDungeonId;
+                            const activeIndex = results.dungeonPowers.findIndex(dp => dp.DungeonID === selectedDungeonId);
                             const offset = index - activeIndex;
                             const absOffset = Math.abs(offset);
+                            const direction = Math.sign(offset);
 
-                            // Only render visible cards to improve performance and look
-                            if (absOffset > 3) return null;
+                            // Render all cards to ensure full list is visible
+                            // if (absOffset > 3) return null;
 
-                            const rank = getRankConfig(d.power);
-                            const isSelected = offset === 0;
+                            const rankConfig = getRankConfig(d.TotalDamage);
+                            const powerInWan = Math.round(d.TotalDamage / 10000);
+
+                            // Split Stack Logic:
+                            // - Active: Center (0)
+                            // - Sides: Pushed out by 60% + stack spacing
+                            // - This creates a "Gap" so the active card doesn't cover the immediate neighbors
+                            let translateX = 0;
+                            let translateZ = 0;
+                            let rotateY = 0;
+                            let scale = 1;
+                            let opacity = 1;
+
+                            if (isActive) {
+                                translateX = 0;
+                                translateZ = 0;
+                                rotateY = 0;
+                                scale = 1;
+                                opacity = 1;
+                            } else {
+                                // Base gap of 60% (relative to card width) + 15% per extra card
+                                const baseGap = 60;
+                                const stackSpacing = 15;
+                                const xPercent = direction * (baseGap + (absOffset - 1) * stackSpacing);
+
+                                translateX = xPercent; // We'll use % in the style string
+                                translateZ = -100 - (absOffset * 50); // Deepen the stack
+                                rotateY = direction * -15; // Rotate inwards to face center
+                                scale = 0.85 - (absOffset * 0.05);
+                                opacity = Math.max(0.4, 1 - absOffset * 0.15);
+                            }
 
                             return (
                                 <div
                                     key={d.DungeonID}
                                     onClick={() => setSelectedDungeonId(d.DungeonID)}
                                     className={clsx(
-                                        "absolute w-64 md:w-72 p-5 rounded-2xl border transition-all duration-500 ease-out cursor-pointer shadow-2xl flex flex-col justify-between gap-4",
-                                        isSelected
-                                            ? "bg-slate-800 border-cyan-500 shadow-[0_0_30px_rgba(6,182,212,0.2)]"
-                                            : "bg-slate-900/95 border-slate-700 hover:border-slate-600"
+                                        "absolute transition-all duration-500 ease-out cursor-pointer origin-center",
+                                        isActive ? "z-50 w-full md:w-[90%] max-w-5xl h-full" : "w-[85%] md:w-[80%] h-[90%]"
                                     )}
                                     style={{
-                                        transform: `translateX(${offset * 60}%) scale(${1 - absOffset * 0.1})`,
+                                        transform: isActive
+                                            ? `translateX(0) scale(1) translateZ(0) rotateY(0)`
+                                            : `translateX(${translateX}%) scale(${scale}) translateZ(${translateZ}px) rotateY(${rotateY}deg)`,
                                         zIndex: 50 - absOffset,
-                                        opacity: isSelected ? 1 : Math.max(0.3, 1 - absOffset * 0.3),
-                                        filter: isSelected ? 'none' : `blur(${absOffset * 1}px) brightness(${1 - absOffset * 0.15})`
+                                        opacity: opacity,
+                                        filter: isActive ? 'none' : `blur(${absOffset * 1}px) brightness(${1 - absOffset * 0.1})`,
                                     }}
                                 >
-                                    {/* Selection Indicator */}
-                                    {isSelected && (
-                                        <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-cyan-400 via-purple-500 to-cyan-400 animate-gradient-x"></div>
-                                    )}
-
-                                    <div className="flex justify-between items-start">
-                                        <span className={clsx(
-                                            "text-xs font-black px-2 py-1 rounded-lg border backdrop-blur-md",
-                                            rank.TextColor,
-                                            rank.Border,
-                                            "bg-slate-950/50"
-                                        )}>
-                                            {rank.Rank}
-                                        </span>
-                                        {isSelected && <Swords className="w-5 h-5 text-cyan-400 animate-pulse" />}
-                                    </div>
-
-                                    <div className="mt-2">
-                                        <h4 className={clsx(
-                                            "font-bold text-lg line-clamp-2 whitespace-normal leading-snug transition-colors min-h-[3.5rem]",
-                                            isSelected ? "text-white" : "text-slate-400"
-                                        )}>
-                                            {d.DungeonName}
-                                        </h4>
-                                        <div className="flex items-baseline gap-1 mt-2">
-                                            <span className={clsx(
-                                                "font-black text-2xl tracking-tight",
-                                                isSelected ? "text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-300" : "text-slate-500"
-                                            )}>
-                                                {formatDamage(d.power, false)}
-                                            </span>
-                                            <span className="text-xs font-bold text-slate-600">万</span>
-                                        </div>
-                                    </div>
+                                    <DungeonDetail
+                                        dungeon={d}
+                                        isExpanded={isActive}
+                                        standalone={true}
+                                        rankConfig={rankConfig}
+                                        power={powerInWan}
+                                    />
                                 </div>
                             );
                         })}
                     </div>
                 </div>
             </div>
-
-            {/* Selected Dungeon Detail View */}
-            {selectedDungeon && (
-                <div className="animate-fade-in">
-                    <DungeonDetail
-                        dungeon={selectedDungeon}
-                        isExpanded={true}
-                        onToggle={() => { }}
-                    />
-                </div>
-            )}
         </div>
     );
 };

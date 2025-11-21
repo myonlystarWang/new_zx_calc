@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { DataService } from '../../services/DataService';
 import { calculateDamage } from '../../utils/calculator';
 import type { Dungeon } from '../../types';
-import { Sword, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Sword } from 'lucide-react';
 import clsx from 'clsx';
 
 interface DungeonDetailProps {
@@ -11,12 +11,27 @@ interface DungeonDetailProps {
     isExpanded?: boolean;
     onToggle?: () => void;
     standalone?: boolean;
+    rankConfig?: {
+        Rank: string;
+        Color: string;
+        Shadow: string;
+        Border: string;
+        TextColor: string;
+        Glow: string;
+    };
+    power?: number;
 }
 
-export const DungeonDetail: React.FC<DungeonDetailProps> = ({ dungeon, isExpanded = false, onToggle, standalone = false }) => {
+export const DungeonDetail: React.FC<DungeonDetailProps> = ({
+    dungeon,
+    isExpanded = false,
+    onToggle,
+    standalone = false,
+    rankConfig,
+    power
+}) => {
     const { userCharacter, activeBuffIds, buffs, buffValues } = useApp();
     const [selectedMonsterId, setSelectedMonsterId] = useState<string | null>(null);
-    const tabsContainerRef = useRef<HTMLDivElement>(null);
 
     // Reset selected monster when dungeon changes
     useEffect(() => {
@@ -47,16 +62,6 @@ export const DungeonDetail: React.FC<DungeonDetailProps> = ({ dungeon, isExpande
         return chineseNumbers[num] || num.toString();
     };
 
-    const scrollTabs = (direction: 'left' | 'right') => {
-        if (tabsContainerRef.current) {
-            const scrollAmount = 150;
-            tabsContainerRef.current.scrollBy({
-                left: direction === 'left' ? -scrollAmount : scrollAmount,
-                behavior: 'smooth'
-            });
-        }
-    };
-
     const showContent = standalone || isExpanded;
     const selectedMonster = dungeon.Monsters.find(m => m.MonsterID === selectedMonsterId) || dungeon.Monsters[0];
 
@@ -84,18 +89,46 @@ export const DungeonDetail: React.FC<DungeonDetailProps> = ({ dungeon, isExpande
                 {/* Background decorative glow */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 blur-3xl rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
 
-                <div className="flex flex-row items-center gap-3 relative z-10">
-                    <span className={clsx(
-                        "font-bold text-lg md:text-xl text-slate-100 transition-colors tracking-wide",
-                        !standalone && 'group-hover:text-cyan-300'
-                    )}>
-                        {dungeon.DungeonName}
-                    </span>
-                    <div className="flex items-center shrink-0">
-                        <span className="text-[10px] md:text-xs font-bold text-cyan-400 bg-cyan-500/10 px-2.5 py-0.5 rounded-full border border-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.1)]">
-                            {dungeon.Monsters.length} BOSS
-                        </span>
+                <div className="flex flex-col gap-3 relative z-10">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            {rankConfig && (
+                                <span className={clsx(
+                                    "text-xs font-black px-2 py-1 rounded-lg border backdrop-blur-md shadow-sm",
+                                    rankConfig.TextColor,
+                                    rankConfig.Border,
+                                    "bg-slate-950/50"
+                                )}>
+                                    {rankConfig.Rank}
+                                </span>
+                            )}
+                            <span className={clsx(
+                                "font-bold text-lg md:text-xl text-slate-100 transition-colors tracking-wide",
+                                !standalone && 'group-hover:text-cyan-300'
+                            )}>
+                                {dungeon.DungeonName}
+                            </span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] md:text-xs font-bold text-cyan-400 bg-cyan-500/10 px-2.5 py-0.5 rounded-full border border-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.1)]">
+                                {dungeon.Monsters.length} BOSS
+                            </span>
+                            {standalone && <Sword className="w-4 h-4 text-cyan-500/50" />}
+                        </div>
                     </div>
+
+                    {power !== undefined && (
+                        <div className="flex items-baseline gap-1">
+                            <span className={clsx(
+                                "font-black text-2xl md:text-3xl tracking-tight",
+                                "text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-300"
+                            )}>
+                                {formatDamage(power, false)}
+                            </span>
+                            <span className="text-xs font-bold text-slate-600">万</span>
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -105,20 +138,9 @@ export const DungeonDetail: React.FC<DungeonDetailProps> = ({ dungeon, isExpande
                     "border-t border-slate-700/50 bg-slate-900/30 flex flex-col",
                     standalone ? 'flex-1 overflow-hidden' : ''
                 )}>
-                    {/* Boss Tabs Navigation with Side Buttons */}
+                    {/* Boss Tabs Navigation - Clean Scrollable List */}
                     <div className="flex items-center gap-1 md:gap-2 px-2 py-2 border-b border-slate-700/30 bg-slate-900/50">
-                        {/* Left Arrow - Desktop */}
-                        <button
-                            onClick={() => scrollTabs('left')}
-                            className="hidden md:flex shrink-0 w-6 h-6 items-center justify-center rounded-full bg-slate-800 border border-slate-700 text-slate-400 hover:bg-cyan-500 hover:border-cyan-400 hover:text-white transition-all"
-                        >
-                            <ChevronLeft className="w-4 h-4" />
-                        </button>
-
-                        <div
-                            ref={tabsContainerRef}
-                            className="flex-1 flex overflow-x-auto gap-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
-                        >
+                        <div className="flex-1 flex overflow-x-auto gap-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
                             {dungeon.Monsters.map((monster) => {
                                 const isSelected = monster.MonsterID === selectedMonsterId;
                                 return (
@@ -147,14 +169,6 @@ export const DungeonDetail: React.FC<DungeonDetailProps> = ({ dungeon, isExpande
                                 );
                             })}
                         </div>
-
-                        {/* Right Arrow - Desktop */}
-                        <button
-                            onClick={() => scrollTabs('right')}
-                            className="hidden md:flex shrink-0 w-6 h-6 items-center justify-center rounded-full bg-slate-800 border border-slate-700 text-slate-400 hover:bg-cyan-500 hover:border-cyan-400 hover:text-white transition-all"
-                        >
-                            <ChevronRight className="w-4 h-4" />
-                        </button>
                     </div>
 
                     {/* Selected Boss Data */}
