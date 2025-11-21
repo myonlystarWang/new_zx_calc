@@ -42,7 +42,7 @@ export const AttributePanel: React.FC<AttributePanelProps> = ({ attributes, onCh
                         onChange={(v) => handleChange('CharacterMinAttack', v)}
                         max={750000}
                         icon={<Sword className="w-4 h-4" />}
-                        iconColor="text-cyan-400"
+                        color="cyan"
                     />
                     <AttributeCard
                         label="最大攻击"
@@ -50,7 +50,7 @@ export const AttributePanel: React.FC<AttributePanelProps> = ({ attributes, onCh
                         onChange={(v) => handleChange('CharacterMaxAttack', v)}
                         max={750000}
                         icon={<Sword className="w-4 h-4" />}
-                        iconColor="text-purple-400"
+                        color="purple"
                     />
                     <AttributeCard
                         label="气血"
@@ -59,7 +59,7 @@ export const AttributePanel: React.FC<AttributePanelProps> = ({ attributes, onCh
                         max={6000000}
                         step={100}
                         icon={<Heart className="w-4 h-4" />}
-                        iconColor="text-red-400"
+                        color="red"
                     />
                     <AttributeCard
                         label="真气"
@@ -68,7 +68,7 @@ export const AttributePanel: React.FC<AttributePanelProps> = ({ attributes, onCh
                         max={6000000}
                         step={100}
                         icon={<Zap className="w-4 h-4" />}
-                        iconColor="text-blue-400"
+                        color="blue"
                     />
                     <AttributeCard
                         label="防御"
@@ -76,7 +76,7 @@ export const AttributePanel: React.FC<AttributePanelProps> = ({ attributes, onCh
                         onChange={(v) => handleChange('CharacterDefense', v)}
                         max={500000}
                         icon={<Shield className="w-4 h-4" />}
-                        iconColor="text-emerald-400"
+                        color="emerald"
                     />
                     <AttributeCard
                         label="暴击伤害 (%)"
@@ -84,7 +84,7 @@ export const AttributePanel: React.FC<AttributePanelProps> = ({ attributes, onCh
                         onChange={(v) => handleChange('CharacterCriticalHitDamagePercent', v)}
                         max={3000}
                         icon={<Crosshair className="w-4 h-4" />}
-                        iconColor="text-yellow-400"
+                        color="yellow"
                     />
                     <AttributeCard
                         label="对怪增伤 (%)"
@@ -92,7 +92,7 @@ export const AttributePanel: React.FC<AttributePanelProps> = ({ attributes, onCh
                         onChange={(v) => handleChange('CharacterMonsterDamageIncreasePercent', v)}
                         max={60}
                         icon={<Skull className="w-4 h-4" />}
-                        iconColor="text-orange-400"
+                        color="orange"
                     />
                 </div>
             </div>
@@ -101,9 +101,15 @@ export const AttributePanel: React.FC<AttributePanelProps> = ({ attributes, onCh
             <BuffSelector />
 
             {/* Radar Chart Section */}
-            <Card title="属性分布" className="bg-slate-800/50">
-                <AttributeRadarChart attributes={attributes} />
-            </Card>
+            <div>
+                <h2 className="text-lg font-semibold text-slate-100 mb-4 flex items-center gap-2">
+                    <span className="w-1 h-5 bg-gradient-to-b from-cyan-500 to-blue-500 rounded-full"></span>
+                    修炼星盘
+                </h2>
+                <div className="glass-panel p-4 bg-slate-800/50 flex items-center justify-center">
+                    <AttributeRadarChart attributes={attributes} />
+                </div>
+            </div>
 
             {/* Formula Description */}
             {/* <Card title="计算公式说明" className="bg-slate-800/50">

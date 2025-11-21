@@ -25,22 +25,25 @@ export const FactionSelector: React.FC = () => {
 
                     const colorClasses = {
                         cyan: {
-                            active: 'border-cyan-500/70 bg-cyan-500/10',
-                            icon: 'bg-cyan-500/20 text-cyan-400',
+                            active: 'border-cyan-500/70 bg-cyan-500/10 shadow-[0_0_15px_rgba(6,182,212,0.15)]',
+                            icon: 'bg-cyan-500/20 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.4)]',
                             text: 'text-cyan-300',
-                            hover: 'hover:border-cyan-500/50'
+                            hover: 'hover:border-cyan-500/50',
+                            bar: 'via-cyan-500'
                         },
                         yellow: {
-                            active: 'border-yellow-500/70 bg-yellow-500/10',
-                            icon: 'bg-yellow-500/20 text-yellow-400',
+                            active: 'border-yellow-500/70 bg-yellow-500/10 shadow-[0_0_15px_rgba(234,179,8,0.15)]',
+                            icon: 'bg-yellow-500/20 text-yellow-400 shadow-[0_0_15px_rgba(234,179,8,0.4)]',
                             text: 'text-yellow-300',
-                            hover: 'hover:border-yellow-500/50'
+                            hover: 'hover:border-yellow-500/50',
+                            bar: 'via-yellow-500'
                         },
                         purple: {
-                            active: 'border-purple-500/70 bg-purple-500/10',
-                            icon: 'bg-purple-500/20 text-purple-400',
+                            active: 'border-purple-500/70 bg-purple-500/10 shadow-[0_0_15px_rgba(168,85,247,0.15)]',
+                            icon: 'bg-purple-500/20 text-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.4)]',
                             text: 'text-purple-300',
-                            hover: 'hover:border-purple-500/50'
+                            hover: 'hover:border-purple-500/50',
+                            bar: 'via-purple-500'
                         }
                     };
 
@@ -51,13 +54,13 @@ export const FactionSelector: React.FC = () => {
                             key={faction.id}
                             onClick={() => updateCharacterClass(userCharacter.ClassID, faction.id as any)}
                             className={clsx(
-                                'glass-panel p-6 cursor-pointer transition-all duration-300 group',
-                                isActive ? colors.active : `border-slate-700 ${colors.hover}`
+                                'glass-panel p-6 cursor-pointer transition-all duration-300 group relative overflow-hidden',
+                                isActive ? colors.active : `border-slate-700 hover:bg-slate-800/50 ${colors.hover}`
                             )}
                         >
-                            <div className="flex flex-col items-center gap-3 text-center">
+                            <div className="flex flex-col items-center gap-3 text-center relative z-10">
                                 <div className={clsx(
-                                    'p-4 rounded-xl transition-all',
+                                    'p-4 rounded-xl transition-all duration-300',
                                     isActive
                                         ? `${colors.icon} scale-110`
                                         : 'bg-slate-800/50 text-slate-400 group-hover:bg-slate-700/50'
@@ -71,11 +74,11 @@ export const FactionSelector: React.FC = () => {
                                 )}>
                                     {faction.name}
                                 </span>
-
-                                {isActive && (
-                                    <div className={`w-full h-1 bg-gradient-to-r from-transparent via-${faction.color}-500 to-transparent rounded-full`} />
-                                )}
                             </div>
+
+                            {isActive && (
+                                <div className={`absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent ${colors.bar} to-transparent opacity-80`} />
+                            )}
                         </div>
                     );
                 })}

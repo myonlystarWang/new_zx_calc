@@ -22,17 +22,17 @@ export const ClassSelector: React.FC = () => {
                             key={cls.ClassID}
                             onClick={() => updateCharacterClass(cls.ClassID, userCharacter.Faction)}
                             className={clsx(
-                                'glass-panel p-4 cursor-pointer transition-all duration-300 hover:border-blue-500/50 group',
+                                'glass-panel p-4 cursor-pointer transition-all duration-300 hover:border-blue-500/50 group relative overflow-hidden',
                                 isActive
-                                    ? 'border-blue-500/70 bg-blue-500/10'
+                                    ? 'border-blue-500/70 bg-blue-500/10 shadow-[0_0_15px_rgba(59,130,246,0.15)]'
                                     : 'border-slate-700'
                             )}
                         >
-                            <div className="flex flex-col items-center gap-2 text-center">
+                            <div className="flex flex-col items-center gap-2 text-center relative z-10">
                                 <div className={clsx(
                                     'p-3 rounded-xl transition-all',
                                     isActive
-                                        ? 'bg-blue-500/20 text-blue-400 scale-110'
+                                        ? 'bg-blue-500/20 text-blue-400 scale-110 shadow-[0_0_15px_rgba(59,130,246,0.4)]'
                                         : 'bg-slate-800/50 text-slate-400 group-hover:bg-slate-700/50'
                                 )}>
                                     <User className="w-5 h-5" />
@@ -44,11 +44,11 @@ export const ClassSelector: React.FC = () => {
                                 )}>
                                     {cls.ClassName}
                                 </span>
-
-                                {isActive && (
-                                    <div className="w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent rounded-full" />
-                                )}
                             </div>
+
+                            {isActive && (
+                                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-80" />
+                            )}
                         </div>
                     );
                 })}

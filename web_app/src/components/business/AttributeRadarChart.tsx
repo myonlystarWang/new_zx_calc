@@ -22,32 +22,32 @@ export const AttributeRadarChart: React.FC<AttributeRadarChartProps> = ({ attrib
     const data = [
         {
             subject: '攻击',
-            value: (attributes.CharacterMaxAttack / 500000) * 100,
+            value: (attributes.CharacterMaxAttack / 750000) * 100,
             fullMark: 100
         },
         {
             subject: '防御',
-            value: (attributes.CharacterDefense / 200000) * 100,
+            value: (attributes.CharacterDefense / 500000) * 100,
             fullMark: 100
         },
         {
             subject: '气血',
-            value: (attributes.CharacterHealth / 2000000) * 100,
+            value: (attributes.CharacterHealth / 6000000) * 100,
             fullMark: 100
         },
         {
             subject: '真气',
-            value: (attributes.CharacterMana / 2000000) * 100,
+            value: (attributes.CharacterMana / 6000000) * 100,
             fullMark: 100
         },
         {
             subject: '暴伤',
-            value: (attributes.CharacterCriticalHitDamagePercent / 2000) * 100,
+            value: (attributes.CharacterCriticalHitDamagePercent / 3000) * 100,
             fullMark: 100
         },
         {
             subject: '对怪',
-            value: (attributes.CharacterMonsterDamageIncreasePercent / 500) * 100,
+            value: (attributes.CharacterMonsterDamageIncreasePercent / 60) * 100,
             fullMark: 100
         },
     ];
@@ -55,19 +55,33 @@ export const AttributeRadarChart: React.FC<AttributeRadarChartProps> = ({ attrib
     // 自定义标签渲染函数 - 用不同颜色显示标签
     const CustomLabel = (props: any) => {
         const { x, y, payload } = props;
-        const color = attributeColors[payload.value as keyof typeof attributeColors] || '#94a3b8';
+        const label = payload.value as string;
+        const color = attributeColors[label as keyof typeof attributeColors] || '#94a3b8';
+
+        let textAnchor: "middle" | "start" | "end" = 'middle';
+        if (['防御', '气血'].includes(label)) {
+            textAnchor = 'start';
+        } else if (['暴伤', '对怪'].includes(label)) {
+            textAnchor = 'end';
+        }
+
+        // 微调垂直位置
+        let dy = 0;
+        if (label === '攻击') dy = -5;
+        if (label === '真气') dy = 5;
 
         return (
             <text
                 x={x}
                 y={y}
+                dy={dy}
                 fill={color}
                 fontSize={16}
                 fontWeight="600"
-                textAnchor={x > 200 ? 'start' : 'end'}
+                textAnchor={textAnchor}
                 dominantBaseline="middle"
             >
-                {payload.value}
+                {label}
             </text>
         );
     };
