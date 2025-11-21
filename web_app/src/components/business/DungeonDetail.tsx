@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { DataService } from '../../services/DataService';
 import { calculateDamage } from '../../utils/calculator';
-import type { Dungeon } from '../../types';
+import type { Dungeon, RankConfig } from '../../types';
 import { Sword } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -11,14 +11,7 @@ interface DungeonDetailProps {
     isExpanded?: boolean;
     onToggle?: () => void;
     standalone?: boolean;
-    rankConfig?: {
-        Rank: string;
-        Color: string;
-        Shadow: string;
-        Border: string;
-        TextColor: string;
-        Glow: string;
-    };
+    rankConfig?: RankConfig;
     power?: number;
 }
 

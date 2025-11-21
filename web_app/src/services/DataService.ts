@@ -1,9 +1,10 @@
-import {
+import type {
     CharacterClass,
     AllSkills,
     Buff,
     Dungeon,
-    Monster
+    Monster,
+    RankConfig
 } from '../types';
 
 const DATA_BASE_URL = '/game_data';
@@ -16,6 +17,7 @@ export class DataService {
     private dungeonsMetadata: any[] | null = null; // Raw dungeons.json
     private dungeonsMonsters: Record<string, Monster[]> | null = null;
     private buffs: Buff[] | null = null;
+    private rankConfigs: RankConfig[] | null = null;
 
     private constructor() { }
 
@@ -31,7 +33,8 @@ export class DataService {
             this.loadClasses(),
             this.loadSkills(),
             this.loadDungeons(),
-            this.loadBuffs()
+            this.loadBuffs(),
+            this.loadRankConfigs()
         ]);
     }
 
@@ -59,6 +62,11 @@ export class DataService {
         this.buffs = await response.json();
     }
 
+    private async loadRankConfigs(): Promise<void> {
+        const response = await fetch(`${DATA_BASE_URL}/rank_config.json`);
+        this.rankConfigs = await response.json();
+    }
+
     public getClasses(): CharacterClass[] {
         return this.classes || [];
     }
@@ -81,5 +89,9 @@ export class DataService {
 
     public getBuffs(): Buff[] {
         return this.buffs || [];
+    }
+
+    public getRankConfigs(): RankConfig[] {
+        return this.rankConfigs || [];
     }
 }

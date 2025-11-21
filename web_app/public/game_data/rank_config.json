@@ -1,50 +1,56 @@
 [
     {
         "Rank": "SSS",
-        "MinPower": 500000000,
-        "Color": "from-yellow-400 to-orange-500",
-        "Shadow": "shadow-orange-500/50",
-        "Border": "border-yellow-300/50",
-        "TextColor": "text-yellow-100"
+        "Threshold": 500000000,
+        "Color": "bg-yellow-500/10",
+        "Shadow": "shadow-[0_0_20px_rgba(234,179,8,0.4)]",
+        "Border": "border-yellow-400",
+        "TextColor": "text-yellow-400",
+        "Glow": "drop-shadow-[0_0_10px_rgba(234,179,8,0.6)]"
     },
     {
         "Rank": "SS",
-        "MinPower": 100000000,
-        "Color": "from-purple-400 to-fuchsia-600",
-        "Shadow": "shadow-purple-500/50",
-        "Border": "border-purple-300/50",
-        "TextColor": "text-purple-100"
+        "Threshold": 100000000,
+        "Color": "bg-purple-500/10",
+        "Shadow": "shadow-[0_0_15px_rgba(168,85,247,0.4)]",
+        "Border": "border-purple-400",
+        "TextColor": "text-purple-400",
+        "Glow": "drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]"
     },
     {
         "Rank": "S",
-        "MinPower": 10000000,
-        "Color": "from-red-400 to-rose-600",
-        "Shadow": "shadow-red-500/50",
-        "Border": "border-red-300/50",
-        "TextColor": "text-red-100"
+        "Threshold": 10000000,
+        "Color": "bg-blue-500/10",
+        "Shadow": "shadow-[0_0_15px_rgba(59,130,246,0.4)]",
+        "Border": "border-blue-400",
+        "TextColor": "text-blue-400",
+        "Glow": "drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]"
     },
     {
         "Rank": "A",
-        "MinPower": 1000000,
-        "Color": "from-blue-400 to-cyan-600",
-        "Shadow": "shadow-blue-500/50",
-        "Border": "border-blue-300/50",
-        "TextColor": "text-blue-100"
+        "Threshold": 1000000,
+        "Color": "bg-cyan-500/10",
+        "Shadow": "shadow-[0_0_15px_rgba(34,211,238,0.4)]",
+        "Border": "border-cyan-400",
+        "TextColor": "text-cyan-400",
+        "Glow": ""
     },
     {
         "Rank": "B",
-        "MinPower": 100000,
-        "Color": "from-emerald-400 to-green-600",
-        "Shadow": "shadow-emerald-500/50",
-        "Border": "border-emerald-300/50",
-        "TextColor": "text-emerald-100"
+        "Threshold": 100000,
+        "Color": "bg-emerald-500/10",
+        "Shadow": "shadow-[0_0_10px_rgba(52,211,153,0.4)]",
+        "Border": "border-emerald-400",
+        "TextColor": "text-emerald-400",
+        "Glow": ""
     },
     {
         "Rank": "C",
-        "MinPower": 0,
-        "Color": "from-slate-400 to-slate-600",
-        "Shadow": "shadow-slate-500/50",
-        "Border": "border-slate-300/50",
-        "TextColor": "text-slate-100"
+        "Threshold": 0,
+        "Color": "bg-slate-500/10",
+        "Shadow": "shadow-none",
+        "Border": "border-slate-500",
+        "TextColor": "text-slate-400",
+        "Glow": ""
     }
 ]

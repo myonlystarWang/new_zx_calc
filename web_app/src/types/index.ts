@@ -110,3 +110,13 @@ export interface Buff {
   DefaultEffectValue?: number;
   BuffEffects: BuffEffects;
 }
+
+export interface RankConfig {
+  Rank: string;
+  Threshold: number;
+  Color: string;
+  Shadow: string;
+  Border: string;
+  TextColor: string;
+  Glow: string;
+}

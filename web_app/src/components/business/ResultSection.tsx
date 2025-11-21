@@ -6,67 +6,9 @@ import { Trophy, Sparkles, Copy } from 'lucide-react';
 import clsx from 'clsx';
 import { DungeonDetail } from './DungeonDetail';
 
-const RANK_CONFIGS = [
-    {
-        Rank: 'SSS',
-        Threshold: 500000000, // 2000万
-        Color: 'bg-yellow-500/10',
-        Shadow: 'shadow-[0_0_20px_rgba(234,179,8,0.4)]',
-        Border: 'border-yellow-400',
-        TextColor: 'text-yellow-400',
-        Glow: 'drop-shadow-[0_0_10px_rgba(234,179,8,0.6)]'
-    },
-    {
-        Rank: 'SS',
-        Threshold: 100000000, // 1000万
-        Color: 'bg-purple-500/10',
-        Shadow: 'shadow-[0_0_15px_rgba(168,85,247,0.4)]',
-        Border: 'border-purple-400',
-        TextColor: 'text-purple-400',
-        Glow: 'drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]'
-    },
-    {
-        Rank: 'S',
-        Threshold: 10000000, // 500万
-        Color: 'bg-blue-500/10',
-        Shadow: 'shadow-[0_0_15px_rgba(59,130,246,0.4)]',
-        Border: 'border-blue-400',
-        TextColor: 'text-blue-400',
-        Glow: 'drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]'
-    },
-    {
-        Rank: 'A',
-        Threshold: 1000000,
-        Color: 'bg-cyan-500/10',
-        Shadow: 'shadow-[0_0_15px_rgba(34,211,238,0.4)]',
-        Border: 'border-cyan-400',
-        TextColor: 'text-cyan-400',
-        Glow: ''
-    },
-    {
-        Rank: 'B',
-        Threshold: 100000,
-        Color: 'bg-emerald-500/10',
-        Shadow: 'shadow-[0_0_10px_rgba(52,211,153,0.4)]',
-        Border: 'border-emerald-400',
-        TextColor: 'text-emerald-400',
-        Glow: ''
-    },
-    {
-        Rank: 'C',
-        Threshold: 0,
-        Color: 'bg-slate-500/10',
-        Shadow: 'shadow-none',
-        Border: 'border-slate-500',
-        TextColor: 'text-slate-400',
-        Glow: ''
-    }
-];
-
 export const ResultSection: React.FC = () => {
     const { userCharacter, activeBuffIds, buffs, buffValues } = useApp();
     const [selectedDungeonId, setSelectedDungeonId] = useState<string | null>(null);
-
     const results = useMemo(() => {
         const service = DataService.getInstance();
         const skillsMap = service.getSkills(userCharacter.ClassID);
@@ -107,7 +49,19 @@ export const ResultSection: React.FC = () => {
     }, [results.dungeonPowers, selectedDungeonId]);
 
     const getRankConfig = (power: number) => {
-        return RANK_CONFIGS.find(c => power >= c.Threshold) || RANK_CONFIGS[RANK_CONFIGS.length - 1];
+        const rankConfigs = DataService.getInstance().getRankConfigs();
+        if (!rankConfigs || rankConfigs.length === 0) {
+            return {
+                Rank: 'C',
+                Threshold: 0,
+                Color: 'bg-slate-500/10',
+                Shadow: 'shadow-none',
+                Border: 'border-slate-500',
+                TextColor: 'text-slate-400',
+                Glow: ''
+            };
+        }
+        return rankConfigs.find(c => power >= c.Threshold) || rankConfigs[rankConfigs.length - 1];
     };
 
     const formatDamage = (damage: number, withUnit: boolean = true): string => {
