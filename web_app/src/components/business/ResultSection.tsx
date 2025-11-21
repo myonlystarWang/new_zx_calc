@@ -65,7 +65,7 @@ const RANK_CONFIGS = [
 ];
 
 export const ResultSection: React.FC = () => {
-    const { userCharacter, activeBuffIds, buffs } = useApp();
+    const { userCharacter, activeBuffIds, buffs, buffValues } = useApp();
     const [expandedDungeonIds, setExpandedDungeonIds] = useState<Set<string>>(new Set());
 
     const results = useMemo(() => {
@@ -80,7 +80,8 @@ export const ResultSection: React.FC = () => {
                 userCharacter.BaseAttributes,
                 skills,
                 dungeon.Monsters,
-                activeBuffs
+                activeBuffs,
+                buffValues
             );
             return {
                 ...dungeon,
@@ -97,7 +98,7 @@ export const ResultSection: React.FC = () => {
             totalPower,
             dungeonPowers
         };
-    }, [userCharacter, activeBuffIds, buffs]);
+    }, [userCharacter, activeBuffIds, buffs, buffValues]);
 
     const getRankConfig = (power: number) => {
         return RANK_CONFIGS.find(c => power >= c.MinPower) || RANK_CONFIGS[RANK_CONFIGS.length - 1];

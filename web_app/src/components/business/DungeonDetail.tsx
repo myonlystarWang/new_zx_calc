@@ -12,7 +12,7 @@ interface DungeonDetailProps {
 }
 
 export const DungeonDetail: React.FC<DungeonDetailProps> = ({ dungeon, isExpanded, onToggle }) => {
-    const { userCharacter, activeBuffIds, buffs } = useApp();
+    const { userCharacter, activeBuffIds, buffs, buffValues } = useApp();
 
     const service = DataService.getInstance();
     const skillsMap = service.getSkills(userCharacter.ClassID);
@@ -22,11 +22,11 @@ export const DungeonDetail: React.FC<DungeonDetailProps> = ({ dungeon, isExpande
     const formatDamage = (damage: number, withUnit: boolean = true): string => {
         if (damage >= 100000000) {
             const value = (damage / 100000000).toFixed(2);
-            return withUnit ? `${value}亿` : value;
+            return withUnit ? `${value} 亿` : value;
         }
         if (damage >= 10000) {
             const value = (damage / 10000).toFixed(2);
-            return withUnit ? `${value}万` : value;
+            return withUnit ? `${value} 万` : value;
         }
         return Math.round(damage).toString();
     };
@@ -47,20 +47,19 @@ export const DungeonDetail: React.FC<DungeonDetailProps> = ({ dungeon, isExpande
                     <div className="text-right">
                         <div className="text-sm text-slate-400">副本战力</div>
                         <div className="font-bold text-cyan-400 text-lg">
-                            {formatDamage(
+                            {Math.round(
                                 dungeon.Monsters.reduce((sum, monster) => {
                                     const monsterPower = skills.reduce((skillSum, skill) => {
-                                        const dmg = calculateDamage(userCharacter.BaseAttributes, skill, monster, activeBuffs);
+                                        const dmg = calculateDamage(userCharacter.BaseAttributes, skill, monster, activeBuffs, buffValues);
                                         return skillSum + dmg.avgFinalDamage * skill.SkillImportanceWeight;
                                     }, 0);
                                     return sum + monsterPower;
-                                }, 0) / dungeon.Monsters.length,
-                                false
-                            )}
+                                }, 0) / dungeon.Monsters.length
+                            ).toLocaleString()}
                         </div>
                     </div>
                     <ChevronDown
-                        className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+                        className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''} `}
                     />
                 </div>
             </div>
@@ -95,7 +94,7 @@ export const DungeonDetail: React.FC<DungeonDetailProps> = ({ dungeon, isExpande
                                     </thead>
                                     <tbody>
                                         {skills.map((skill) => {
-                                            const dmg = calculateDamage(userCharacter.BaseAttributes, skill, monster, activeBuffs);
+                                            const dmg = calculateDamage(userCharacter.BaseAttributes, skill, monster, activeBuffs, buffValues);
                                             return (
                                                 <tr key={skill.SkillID} className="border-b border-slate-700/30 hover:bg-slate-800/20">
                                                     <td className="py-2 px-3 text-slate-300">{skill.SkillName}</td>

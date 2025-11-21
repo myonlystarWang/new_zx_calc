@@ -12,7 +12,8 @@ export const calculateDamage = (
     character: CharacterAttributes,
     skill: Skill,
     monster: Monster,
-    activeBuffs: Buff[]
+    activeBuffs: Buff[],
+    buffValues: Record<string, number> = {}
 ): DamageResult => {
     // 1. Aggregate Buff Effects
     let buffAttackPercent = 0;
@@ -29,16 +30,25 @@ export const calculateDamage = (
 
     activeBuffs.forEach(buff => {
         const effects = buff.BuffEffects;
-        buffAttackPercent += effects.BuffAttackPercentEffect || 0;
-        buffAttackFixed += effects.BuffAttackFixedEffect || 0;
-        buffDefensePercent += effects.BuffDefensePercentEffect || 0;
-        buffHealthPercent += effects.BuffHealthPercentEffect || 0;
-        buffManaPercent += effects.BuffManaPercentEffect || 0;
-        buffCritDmg += effects.BuffCriticalDamagePercentEffect || 0;
-        buffFocus += effects.BuffFocusPercentEffect || 0;
-        buffHolyWrath += effects.BuffHolyWrathPercentEffect || 0;
-        buffMonCritDmg += effects.BuffMonsterCriticalDamagePercentEffect || 0;
-        buffMonHarmed += effects.BuffMonsterHarmedPercentEffect || 0;
+        const overrideValue = buffValues[buff.BuffID];
+
+        const getVal = (key: keyof typeof effects) => {
+            if (effects[key] !== undefined) {
+                return overrideValue !== undefined ? overrideValue : effects[key]!;
+            }
+            return 0;
+        };
+
+        buffAttackPercent += getVal('BuffAttackPercentEffect');
+        buffAttackFixed += getVal('BuffAttackFixedEffect');
+        buffDefensePercent += getVal('BuffDefensePercentEffect');
+        buffHealthPercent += getVal('BuffHealthPercentEffect');
+        buffManaPercent += getVal('BuffManaPercentEffect');
+        buffCritDmg += getVal('BuffCriticalDamagePercentEffect');
+        buffFocus += getVal('BuffFocusPercentEffect');
+        buffHolyWrath += getVal('BuffHolyWrathPercentEffect');
+        buffMonCritDmg += getVal('BuffMonsterCriticalDamagePercentEffect');
+        buffMonHarmed += getVal('BuffMonsterHarmedPercentEffect');
     });
 
     // 2. Calculate Base Damage
@@ -156,7 +166,8 @@ export const calculateMonsterPower = (
     character: CharacterAttributes,
     skills: Skill[],
     monster: Monster,
-    activeBuffs: Buff[]
+    activeBuffs: Buff[],
+    buffValues: Record<string, number> = {}
 ): number => {
     // Formula: Σ(SkillAvgDamage * SkillWeight)
     // Note: The doc says "SkillWeight" (SkillImportanceWeight).
@@ -168,7 +179,7 @@ export const calculateMonsterPower = (
     let totalPower = 0;
 
     skills.forEach(skill => {
-        const damage = calculateDamage(character, skill, monster, activeBuffs);
+        const damage = calculateDamage(character, skill, monster, activeBuffs, buffValues);
         totalPower += damage.avgFinalDamage * skill.SkillImportanceWeight;
     });
 
@@ -179,14 +190,15 @@ export const calculateDungeonPower = (
     character: CharacterAttributes,
     skills: Skill[],
     monsters: Monster[],
-    activeBuffs: Buff[]
+    activeBuffs: Buff[],
+    buffValues: Record<string, number> = {}
 ): number => {
     // Formula: Avg(MonsterPower)
     if (monsters.length === 0) return 0;
 
     let totalMonsterPower = 0;
     monsters.forEach(monster => {
-        totalMonsterPower += calculateMonsterPower(character, skills, monster, activeBuffs);
+        totalMonsterPower += calculateMonsterPower(character, skills, monster, activeBuffs, buffValues);
     });
 
     return totalMonsterPower / monsters.length;

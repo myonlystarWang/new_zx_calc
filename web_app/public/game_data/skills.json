@@ -25,7 +25,7 @@
         "RequiredClass": "ZHU_SHUANG",
         "Faction": "XIAN",
         "SkillImportanceWeight": 0.95,
-        "SkillFrequency": 0.2,      
+        "SkillFrequency": 0.2,
         "Cooldown": 60,
         "CastTime": 3,
         "IsAOE": false,
@@ -67,7 +67,7 @@
         "Cooldown": 18,
         "CastTime": 3,
         "IsAOE": false,
-        "SkillBonusAttributes": {   
+        "SkillBonusAttributes": {
           "SkillAttackPercentBonus": 210,
           "SkillAttackFixedBonus": 3300,
           "SkillHealthPercentBonus": 18,
@@ -78,7 +78,7 @@
       },
       {
         "SkillID": "ZS_XIAN_SKILL_LYLZ",
-        "SkillName": "临渊敛爪",    
+        "SkillName": "临渊敛爪",
         "RequiredClass": "ZHU_SHUANG",
         "Faction": "XIAN",
         "SkillImportanceWeight": 0.4,
@@ -108,8 +108,11 @@
         "CastTime": 3,
         "IsAOE": true,
         "SkillBonusAttributes": {
-          "SkillDefensePercentBonus": 15,
-          "SkillHealthPercentBonus": 10
+          "SkillAttackPercentBonus": 240,
+          "SkillAttackFixedBonus": 4000,
+          "SkillHealthPercentBonus": 48,
+          "SkillCriticalDamagePercentBonus": 100,
+          "SkillDamageBonus": 1
         }
       }
     ],
@@ -125,12 +128,12 @@
         "CastTime": 3,
         "IsAOE": false,
         "SkillBonusAttributes": {
-            "SkillAttackPercentBonus": 240,
-            "SkillAttackFixedBonus": 4000,
-            "SkillHealthPercentBonus": 48,
-            "SkillCriticalDamagePercentBonus": 100,
-            "SkillDamageBonus": 1
-          }
+          "SkillAttackPercentBonus": 240,
+          "SkillAttackFixedBonus": 4000,
+          "SkillHealthPercentBonus": 48,
+          "SkillCriticalDamagePercentBonus": 100,
+          "SkillDamageBonus": 1
+        }
       },
       {
         "SkillID": "ZS_MO_SKILL_YLXB",
@@ -139,8 +142,8 @@
         "Faction": "MO",
         "SkillImportanceWeight": 0.95,
         "SkillFrequency": 0.2,
-        "Cooldown": 60, 
-        "CastTime": 3,        
+        "Cooldown": 60,
+        "CastTime": 3,
         "IsAOE": false,
         "SkillBonusAttributes": {
           "SkillAttackPercentBonus": 290,
@@ -149,7 +152,7 @@
           "SkillManaPercentBonus": 40,
           "SkillCriticalDamagePercentBonus": 100,
           "SkillDamageBonus": 1
-        }  
+        }
       },
       {
         "SkillID": "ZS_MO_SKILL_SY3",
@@ -158,7 +161,7 @@
         "Faction": "MO",
         "SkillImportanceWeight": 0.6,
         "SkillFrequency": 0.4,
-        "Cooldown": 6,      
+        "Cooldown": 6,
         "CastTime": 2,
         "IsAOE": false,
         "SkillBonusAttributes": {
@@ -171,7 +174,7 @@
         }
       },
       {
-        "SkillID": "ZS_MO_SKILL_SY2",   
+        "SkillID": "ZS_MO_SKILL_SY2",
         "SkillName": "山雨欲来II",
         "RequiredClass": "ZHU_SHUANG",
         "Faction": "MO",
@@ -215,8 +218,8 @@
         "Faction": "MO",
         "SkillImportanceWeight": 0.4,
         "SkillFrequency": 0.7,
-        "Cooldown": 0,  
-        "CastTime": 1,  
+        "Cooldown": 0,
+        "CastTime": 1,
         "IsAOE": false,
         "SkillBonusAttributes": {
           "SkillAttackPercentBonus": 123,
@@ -268,7 +271,7 @@
           "SkillCriticalDamagePercentBonus": 100,
           "SkillDamageBonus": 1
         }
-      },	  
+      },
       {
         "SkillID": "NY_XIAN_SKILL_JRQG",
         "SkillName": "九刃齐歌",
@@ -287,8 +290,8 @@
           "SkillCriticalDamagePercentBonus": 0,
           "SkillDamageBonus": 3
         }
-      }	
-	],
+      }
+    ],
     "FO": [],
     "MO": []
   }
