@@ -55,17 +55,15 @@ export const BuffSelector: React.FC = () => {
                     const currentValue = buffValues[buff.BuffID] ?? buff.DefaultEffectValue ?? 0;
                     const isFocusBuff = buff.BuffName.includes('专注');
 
-                    const config = {
-                        min: 0,
-                        max: 500,
-                        step: 1,
-                        ...({
-                            'BUFF_FOCUS_EFFECT': { max: 400 },
-                            'BUFF_HOLYWRATH_EFFECT': { max: 22.5, step: 0.1 },
-                            'BUFF_MON_CRITDAMAGE_EFFECT': { max: 900 },
-                            'BUFF_MON_HARMED_EFFECT': { max: 120 }
-                        }[buff.BuffID] || {})
-                    };
+                    const defaults = { min: 0, max: 500, step: 1 };
+                    const overrides = {
+                        'BUFF_FOCUS_EFFECT': { max: 400 },
+                        'BUFF_HOLYWRATH_EFFECT': { max: 22.5, step: 0.1 },
+                        'BUFF_MON_CRITDAMAGE_EFFECT': { max: 900 },
+                        'BUFF_MON_HARMED_EFFECT': { max: 120 }
+                    }[buff.BuffID] || {};
+
+                    const config = { ...defaults, ...overrides };
 
                     return (
                         <div

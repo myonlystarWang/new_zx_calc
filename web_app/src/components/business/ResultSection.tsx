@@ -1,8 +1,8 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { useApp } from '../../context/AppContext';
 import { DataService } from '../../services/DataService';
 import { calculateDungeonPower, calculateTotalPower } from '../../utils/calculator';
-import { Trophy, Copy, Sparkles } from 'lucide-react';
+import { Trophy, Copy, Sparkles, Swords } from 'lucide-react';
 import { DungeonDetail } from './DungeonDetail';
 import clsx from 'clsx';
 
@@ -11,54 +11,54 @@ const RANK_CONFIGS = [
     {
         Rank: 'SSS',
         MinPower: 500000000,
-        Color: 'bg-yellow-500/5',
-        Shadow: 'shadow-[0_0_20px_rgba(250,204,21,0.6),inset_0_0_10px_rgba(250,204,21,0.1)]',
-        Border: 'border-2 border-yellow-400',
-        TextColor: 'text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]',
+        Color: 'bg-yellow-500/10',
+        Shadow: 'shadow-[0_0_20px_rgba(250,204,21,0.4)]',
+        Border: 'border-yellow-400',
+        TextColor: 'text-yellow-400',
         Glow: 'animate-pulse-glow'
     },
     {
         Rank: 'SS',
         MinPower: 100000000,
-        Color: 'bg-purple-500/5',
-        Shadow: 'shadow-[0_0_20px_rgba(168,85,247,0.6),inset_0_0_10px_rgba(168,85,247,0.1)]',
-        Border: 'border-2 border-purple-500',
-        TextColor: 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]',
+        Color: 'bg-purple-500/10',
+        Shadow: 'shadow-[0_0_20px_rgba(168,85,247,0.4)]',
+        Border: 'border-purple-500',
+        TextColor: 'text-purple-400',
         Glow: ''
     },
     {
         Rank: 'S',
         MinPower: 10000000,
-        Color: 'bg-red-500/5',
-        Shadow: 'shadow-[0_0_15px_rgba(239,68,68,0.6),inset_0_0_10px_rgba(239,68,68,0.1)]',
-        Border: 'border-2 border-red-500',
-        TextColor: 'text-red-400 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]',
+        Color: 'bg-red-500/10',
+        Shadow: 'shadow-[0_0_15px_rgba(239,68,68,0.4)]',
+        Border: 'border-red-500',
+        TextColor: 'text-red-400',
         Glow: ''
     },
     {
         Rank: 'A',
         MinPower: 1000000,
-        Color: 'bg-cyan-500/5',
-        Shadow: 'shadow-[0_0_15px_rgba(34,211,238,0.6),inset_0_0_10px_rgba(34,211,238,0.1)]',
-        Border: 'border-2 border-cyan-400',
-        TextColor: 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]',
+        Color: 'bg-cyan-500/10',
+        Shadow: 'shadow-[0_0_15px_rgba(34,211,238,0.4)]',
+        Border: 'border-cyan-400',
+        TextColor: 'text-cyan-400',
         Glow: ''
     },
     {
         Rank: 'B',
         MinPower: 100000,
-        Color: 'bg-emerald-500/5',
-        Shadow: 'shadow-[0_0_10px_rgba(52,211,153,0.5),inset_0_0_5px_rgba(52,211,153,0.1)]',
-        Border: 'border-2 border-emerald-400',
-        TextColor: 'text-emerald-400 drop-shadow-[0_0_5px_rgba(52,211,153,0.8)]',
+        Color: 'bg-emerald-500/10',
+        Shadow: 'shadow-[0_0_10px_rgba(52,211,153,0.4)]',
+        Border: 'border-emerald-400',
+        TextColor: 'text-emerald-400',
         Glow: ''
     },
     {
         Rank: 'C',
         MinPower: 0,
-        Color: 'bg-slate-500/5',
+        Color: 'bg-slate-500/10',
         Shadow: 'shadow-none',
-        Border: 'border-2 border-slate-500',
+        Border: 'border-slate-500',
         TextColor: 'text-slate-400',
         Glow: ''
     }
@@ -66,7 +66,7 @@ const RANK_CONFIGS = [
 
 export const ResultSection: React.FC = () => {
     const { userCharacter, activeBuffIds, buffs, buffValues } = useApp();
-    const [expandedDungeonIds, setExpandedDungeonIds] = useState<Set<string>>(new Set());
+    const [selectedDungeonId, setSelectedDungeonId] = useState<string | null>(null);
 
     const results = useMemo(() => {
         const service = DataService.getInstance();
@@ -100,6 +100,13 @@ export const ResultSection: React.FC = () => {
         };
     }, [userCharacter, activeBuffIds, buffs, buffValues]);
 
+    // Initialize selected dungeon
+    useEffect(() => {
+        if (!selectedDungeonId && results.dungeonPowers.length > 0) {
+            setSelectedDungeonId(results.dungeonPowers[0].DungeonID);
+        }
+    }, [results.dungeonPowers, selectedDungeonId]);
+
     const getRankConfig = (power: number) => {
         return RANK_CONFIGS.find(c => power >= c.MinPower) || RANK_CONFIGS[RANK_CONFIGS.length - 1];
     };
@@ -123,20 +130,10 @@ export const ResultSection: React.FC = () => {
         navigator.clipboard.writeText(text);
     };
 
-    const toggleDungeon = (dungeonId: string) => {
-        setExpandedDungeonIds(prev => {
-            const next = new Set(prev);
-            if (next.has(dungeonId)) {
-                next.delete(dungeonId);
-            } else {
-                next.add(dungeonId);
-            }
-            return next;
-        });
-    };
+    const selectedDungeon = results.dungeonPowers.find(d => d.DungeonID === selectedDungeonId);
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-6">
             {/* Total Power Card - Compact & Fixed Styles */}
             <div className="glass-panel p-6 relative overflow-hidden bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 border-cyan-500/30">
                 {/* Background Decoration */}
@@ -200,28 +197,95 @@ export const ResultSection: React.FC = () => {
                 </div>
             </div>
 
-            {/* Dungeon Power List with Details */}
-            <div className="animate-fade-in">
-                <h3 className="text-base font-semibold text-slate-100 mb-3 flex items-center gap-2">
+            {/* Dungeon Navigator Carousel (3D Coverflow) */}
+            <div className="relative w-full flex flex-col items-center gap-4">
+                <h3 className="text-base font-semibold text-slate-100 flex items-center gap-2 px-1 self-start">
                     <span className="w-1 h-4 bg-gradient-to-b from-cyan-500 to-purple-500 rounded-full"></span>
-                    副本战力详情
+                    副本战力分析
                 </h3>
-                <div className="grid grid-cols-1 gap-2">
-                    {results.dungeonPowers.map((d, index) => (
-                        <div
-                            key={d.DungeonID}
-                            className="animate-fade-in"
-                            style={{ animationDelay: `${index * 0.05}s` }}
-                        >
-                            <DungeonDetail
-                                dungeon={d}
-                                isExpanded={expandedDungeonIds.has(d.DungeonID)}
-                                onToggle={() => toggleDungeon(d.DungeonID)}
-                            />
-                        </div>
-                    ))}
+
+                <div className="relative w-full h-[280px] flex items-center justify-center overflow-hidden perspective-1000">
+                    {/* Cards Container */}
+                    <div className="relative w-full h-full flex items-center justify-center">
+                        {results.dungeonPowers.map((d, index) => {
+                            const activeIndex = results.dungeonPowers.findIndex(item => item.DungeonID === selectedDungeonId);
+                            const offset = index - activeIndex;
+                            const absOffset = Math.abs(offset);
+
+                            // Only render visible cards to improve performance and look
+                            if (absOffset > 3) return null;
+
+                            const rank = getRankConfig(d.power);
+                            const isSelected = offset === 0;
+
+                            return (
+                                <div
+                                    key={d.DungeonID}
+                                    onClick={() => setSelectedDungeonId(d.DungeonID)}
+                                    className={clsx(
+                                        "absolute w-64 md:w-72 p-5 rounded-2xl border transition-all duration-500 ease-out cursor-pointer shadow-2xl flex flex-col justify-between gap-4",
+                                        isSelected
+                                            ? "bg-slate-800 border-cyan-500 shadow-[0_0_30px_rgba(6,182,212,0.2)]"
+                                            : "bg-slate-900/95 border-slate-700 hover:border-slate-600"
+                                    )}
+                                    style={{
+                                        transform: `translateX(${offset * 60}%) scale(${1 - absOffset * 0.1})`,
+                                        zIndex: 50 - absOffset,
+                                        opacity: isSelected ? 1 : Math.max(0.3, 1 - absOffset * 0.3),
+                                        filter: isSelected ? 'none' : `blur(${absOffset * 1}px) brightness(${1 - absOffset * 0.15})`
+                                    }}
+                                >
+                                    {/* Selection Indicator */}
+                                    {isSelected && (
+                                        <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-cyan-400 via-purple-500 to-cyan-400 animate-gradient-x"></div>
+                                    )}
+
+                                    <div className="flex justify-between items-start">
+                                        <span className={clsx(
+                                            "text-xs font-black px-2 py-1 rounded-lg border backdrop-blur-md",
+                                            rank.TextColor,
+                                            rank.Border,
+                                            "bg-slate-950/50"
+                                        )}>
+                                            {rank.Rank}
+                                        </span>
+                                        {isSelected && <Swords className="w-5 h-5 text-cyan-400 animate-pulse" />}
+                                    </div>
+
+                                    <div className="mt-2">
+                                        <h4 className={clsx(
+                                            "font-bold text-lg line-clamp-2 whitespace-normal leading-snug transition-colors min-h-[3.5rem]",
+                                            isSelected ? "text-white" : "text-slate-400"
+                                        )}>
+                                            {d.DungeonName}
+                                        </h4>
+                                        <div className="flex items-baseline gap-1 mt-2">
+                                            <span className={clsx(
+                                                "font-black text-2xl tracking-tight",
+                                                isSelected ? "text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-300" : "text-slate-500"
+                                            )}>
+                                                {formatDamage(d.power, false)}
+                                            </span>
+                                            <span className="text-xs font-bold text-slate-600">万</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
+
+            {/* Selected Dungeon Detail View */}
+            {selectedDungeon && (
+                <div className="animate-fade-in">
+                    <DungeonDetail
+                        dungeon={selectedDungeon}
+                        isExpanded={true}
+                        onToggle={() => { }}
+                    />
+                </div>
+            )}
         </div>
     );
 };
