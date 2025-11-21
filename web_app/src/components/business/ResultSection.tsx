@@ -83,38 +83,55 @@ export const ResultSection: React.FC = () => {
         navigator.clipboard.writeText(text);
     };
 
-    const touchStartX = useRef<number | null>(null);
-    const touchEndX = useRef<number | null>(null);
+    const touchStartX = useRef<number>(0);
+    const touchStartY = useRef<number>(0);
+    const [dragOffset, setDragOffset] = useState(0);
+    const [isDragging, setIsDragging] = useState(false);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const handleTouchStart = (e: React.TouchEvent) => {
-        touchEndX.current = null;
-        touchStartX.current = e.targetTouches[0].clientX;
+        touchStartX.current = e.touches[0].clientX;
+        touchStartY.current = e.touches[0].clientY;
+        setIsDragging(true);
+        setDragOffset(0);
     };
 
     const handleTouchMove = (e: React.TouchEvent) => {
-        touchEndX.current = e.targetTouches[0].clientX;
+        if (!isDragging) return;
+
+        const currentX = e.touches[0].clientX;
+        const currentY = e.touches[0].clientY;
+        const deltaX = currentX - touchStartX.current;
+        const deltaY = currentY - touchStartY.current;
+
+        // Locking direction: if vertical scroll is dominant, stop tracking drag
+        if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaX) < 10) {
+            setIsDragging(false);
+            return;
+        }
+
+        // If we are dragging horizontally
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            setDragOffset(deltaX);
+        }
     };
 
     const handleTouchEnd = () => {
-        if (!touchStartX.current || !touchEndX.current) return;
+        setIsDragging(false);
+        const threshold = 100; // px to trigger switch
 
-        const distance = touchStartX.current - touchEndX.current;
-        const isLeftSwipe = distance > 50;
-        const isRightSwipe = distance < -50;
-
-        if (isLeftSwipe) {
+        if (Math.abs(dragOffset) > threshold) {
             const currentIndex = results.dungeonPowers.findIndex(d => d.DungeonID === selectedDungeonId);
-            if (currentIndex < results.dungeonPowers.length - 1) {
+            if (dragOffset > 0 && currentIndex > 0) {
+                // Swipe Right -> Prev
+                setSelectedDungeonId(results.dungeonPowers[currentIndex - 1].DungeonID);
+            } else if (dragOffset < 0 && currentIndex < results.dungeonPowers.length - 1) {
+                // Swipe Left -> Next
                 setSelectedDungeonId(results.dungeonPowers[currentIndex + 1].DungeonID);
             }
         }
 
-        if (isRightSwipe) {
-            const currentIndex = results.dungeonPowers.findIndex(d => d.DungeonID === selectedDungeonId);
-            if (currentIndex > 0) {
-                setSelectedDungeonId(results.dungeonPowers[currentIndex - 1].DungeonID);
-            }
-        }
+        setDragOffset(0);
     };
 
     return (
@@ -190,6 +207,7 @@ export const ResultSection: React.FC = () => {
                 </h3>
 
                 <div
+                    ref={containerRef}
                     className="relative w-full h-[600px] flex items-center justify-center perspective-1000 touch-pan-y overflow-hidden"
                     onTouchStart={handleTouchStart}
                     onTouchMove={handleTouchMove}
@@ -198,62 +216,52 @@ export const ResultSection: React.FC = () => {
                     {/* Cards Container */}
                     <div className="relative w-full h-full flex items-center justify-center transform-style-3d">
                         {results.dungeonPowers.map((d, index) => {
-                            const isActive = d.DungeonID === selectedDungeonId;
                             const activeIndex = results.dungeonPowers.findIndex(dp => dp.DungeonID === selectedDungeonId);
-                            const offset = index - activeIndex;
-                            const absOffset = Math.abs(offset);
-                            const direction = Math.sign(offset);
+                            const baseOffset = index - activeIndex;
 
-                            // Render all cards to ensure full list is visible
-                            // if (absOffset > 3) return null;
+                            // Calculate effective offset including drag
+                            // Assume card width ~350px for drag sensitivity
+                            const dragInfluence = dragOffset / 350;
+                            const effectiveOffset = baseOffset + dragInfluence;
+
+                            const absOffset = Math.abs(effectiveOffset);
+                            const direction = Math.sign(effectiveOffset) || (baseOffset > 0 ? 1 : -1);
 
                             const rankConfig = getRankConfig(d.TotalDamage);
                             const powerInWan = Math.round(d.TotalDamage / 10000);
 
-                            // Split Stack Logic:
-                            // - Active: Center (0)
-                            // - Sides: Pushed out by 60% + stack spacing
-                            // - This creates a "Gap" so the active card doesn't cover the immediate neighbors
-                            let translateX = 0;
-                            let translateZ = 0;
-                            let rotateY = 0;
-                            let scale = 1;
-                            let opacity = 1;
+                            // Continuous Transform Logic
+                            // X Position: 0 -> 60% -> +15% per step
+                            const xPercent = direction * (60 * Math.min(1, absOffset) + Math.max(0, absOffset - 1) * 15);
 
-                            if (isActive) {
-                                translateX = 0;
-                                translateZ = 0;
-                                rotateY = 0;
-                                scale = 1;
-                                opacity = 1;
-                            } else {
-                                // Base gap of 60% (relative to card width) + 15% per extra card
-                                const baseGap = 60;
-                                const stackSpacing = 15;
-                                const xPercent = direction * (baseGap + (absOffset - 1) * stackSpacing);
+                            // Z Position: 0 -> -150 -> -50 per step
+                            const translateZ = -150 * Math.min(1, absOffset) - (Math.max(0, absOffset - 1) * 50);
 
-                                translateX = xPercent; // We'll use % in the style string
-                                translateZ = -100 - (absOffset * 50); // Deepen the stack
-                                rotateY = direction * -15; // Rotate inwards to face center
-                                scale = 0.85 - (absOffset * 0.05);
-                                opacity = Math.max(0.4, 1 - absOffset * 0.15);
-                            }
+                            // Rotation: 0 -> -15 deg
+                            const rotateY = -15 * Math.min(1, absOffset) * direction;
+
+                            // Scale: 1 -> 0.8 -> -0.05 per step
+                            const scale = 1 - 0.2 * Math.min(1, absOffset) - 0.05 * Math.max(0, absOffset - 1);
+
+                            // Opacity: 1 -> 0.85 -> -0.15 per step
+                            const opacity = Math.max(0, 1 - 0.15 * absOffset);
+
+                            const isActive = d.DungeonID === selectedDungeonId;
 
                             return (
                                 <div
                                     key={d.DungeonID}
-                                    onClick={() => setSelectedDungeonId(d.DungeonID)}
+                                    onClick={() => !isDragging && setSelectedDungeonId(d.DungeonID)}
                                     className={clsx(
-                                        "absolute transition-all duration-500 ease-out cursor-pointer origin-center",
+                                        "absolute ease-out cursor-pointer origin-center",
                                         isActive ? "z-50 w-full md:w-[90%] max-w-5xl h-full" : "w-[85%] md:w-[80%] h-[90%]"
                                     )}
                                     style={{
-                                        transform: isActive
-                                            ? `translateX(0) scale(1) translateZ(0) rotateY(0)`
-                                            : `translateX(${translateX}%) scale(${scale}) translateZ(${translateZ}px) rotateY(${rotateY}deg)`,
-                                        zIndex: 50 - absOffset,
+                                        transform: `translateX(${xPercent}%) scale(${scale}) translateZ(${translateZ}px) rotateY(${rotateY}deg)`,
+                                        zIndex: 50 - Math.round(absOffset),
                                         opacity: opacity,
-                                        filter: isActive ? 'none' : `blur(${absOffset * 1}px) brightness(${1 - absOffset * 0.1})`,
+                                        filter: `blur(${absOffset * 2}px) brightness(${1 - absOffset * 0.1})`,
+                                        transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)'
                                     }}
                                 >
                                     <DungeonDetail
