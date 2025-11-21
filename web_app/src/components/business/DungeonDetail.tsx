@@ -213,8 +213,8 @@ export const DungeonDetail: React.FC<DungeonDetailProps> = ({
                                         <thead>
                                             <tr className="border-b border-slate-700/50">
                                                 <th className="text-left py-2 px-2 text-slate-400 font-medium text-xs whitespace-nowrap w-1/3">技能</th>
-                                                <th className="text-right py-2 px-2 text-slate-400 font-medium text-xs whitespace-nowrap">最小伤害</th>
-                                                <th className="text-right py-2 px-2 text-slate-400 font-medium text-xs whitespace-nowrap">最大伤害</th>
+                                                <th className="hidden md:table-cell text-right py-2 px-2 text-slate-400 font-medium text-xs whitespace-nowrap">最小伤害</th>
+                                                <th className="hidden md:table-cell text-right py-2 px-2 text-slate-400 font-medium text-xs whitespace-nowrap">最大伤害</th>
                                                 <th className="text-right py-2 px-2 text-slate-400 font-medium text-xs whitespace-nowrap w-1/3">平均伤害</th>
                                             </tr>
                                         </thead>
@@ -225,12 +225,17 @@ export const DungeonDetail: React.FC<DungeonDetailProps> = ({
                                                 return (
                                                     <tr key={skill.SkillID} className="hover:bg-slate-800/30 transition-colors group relative">
                                                         <td className="py-3 px-2 text-slate-200 font-medium relative z-10 whitespace-nowrap">
-                                                            {skill.SkillName}
+                                                            <div>{skill.SkillName}</div>
+                                                            <div className="md:hidden text-[10px] text-slate-500 mt-0.5 font-mono flex items-center gap-1">
+                                                                <span className="text-cyan-500/70">{formatDamage(dmg.minFinalDamage, false)}</span>
+                                                                <span className="text-slate-600">/</span>
+                                                                <span className="text-purple-500/70">{formatDamage(dmg.maxFinalDamage)}</span>
+                                                            </div>
                                                         </td>
-                                                        <td className="py-3 px-2 text-right text-cyan-300 font-mono text-sm font-medium relative z-10 whitespace-nowrap">
+                                                        <td className="hidden md:table-cell py-3 px-2 text-right text-cyan-300 font-mono text-sm font-medium relative z-10 whitespace-nowrap">
                                                             {formatDamage(dmg.minFinalDamage)}
                                                         </td>
-                                                        <td className="py-3 px-2 text-right text-purple-300 font-mono text-sm font-medium relative z-10 whitespace-nowrap">
+                                                        <td className="hidden md:table-cell py-3 px-2 text-right text-purple-300 font-mono text-sm font-medium relative z-10 whitespace-nowrap">
                                                             {formatDamage(dmg.maxFinalDamage)}
                                                         </td>
                                                         <td className="py-3 px-2 text-right relative">
