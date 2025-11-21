@@ -25,6 +25,7 @@ export const DungeonDetail: React.FC<DungeonDetailProps> = ({
 }) => {
     const { userCharacter, activeBuffIds, buffs, buffValues } = useApp();
     const [selectedMonsterId, setSelectedMonsterId] = useState<string | null>(null);
+    const tabsContainerRef = React.useRef<HTMLDivElement>(null);
 
     // Reset selected monster when dungeon changes
     useEffect(() => {
@@ -151,7 +152,10 @@ export const DungeonDetail: React.FC<DungeonDetailProps> = ({
                 )}>
                     {/* Boss Tabs Navigation - Clean Scrollable List */}
                     <div className="flex items-center gap-1 md:gap-2 px-2 py-2 border-b border-slate-700/30 bg-slate-900/50">
-                        <div className="flex-1 flex overflow-x-auto gap-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+                        <div
+                            ref={tabsContainerRef}
+                            className="flex-1 flex overflow-x-auto gap-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
+                        >
                             {dungeon.Monsters.map((monster) => {
                                 const isSelected = monster.MonsterID === selectedMonsterId;
                                 return (
@@ -160,6 +164,20 @@ export const DungeonDetail: React.FC<DungeonDetailProps> = ({
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             setSelectedMonsterId(monster.MonsterID);
+
+                                            // Manual scroll calculation to avoid shifting the entire card
+                                            if (tabsContainerRef.current) {
+                                                const container = tabsContainerRef.current;
+                                                const button = e.currentTarget;
+
+                                                // Calculate center position
+                                                const scrollLeft = button.offsetLeft - (container.clientWidth / 2) + (button.clientWidth / 2);
+
+                                                container.scrollTo({
+                                                    left: scrollLeft,
+                                                    behavior: 'smooth'
+                                                });
+                                            }
                                         }}
                                         className={clsx(
                                             "flex-none px-3 py-1.5 rounded-lg text-xs font-medium transition-all border flex items-center gap-1.5 whitespace-nowrap",
