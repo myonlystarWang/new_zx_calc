@@ -186,7 +186,7 @@ export const ResultSection: React.FC = () => {
 
                     {/* Main Power Number - Enhanced Gradient */}
                     <div className="relative mb-3">
-                        <div className="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-cyan-50 to-cyan-200 tracking-tighter drop-shadow-2xl"
+                        <div className="text-4xl sm:text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-cyan-50 to-cyan-200 tracking-tighter drop-shadow-2xl"
                             style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5))' }}>
                             {Math.round(results.totalPower).toLocaleString()}
                         </div>

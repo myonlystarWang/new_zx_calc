@@ -89,46 +89,64 @@ export const DungeonDetail: React.FC<DungeonDetailProps> = ({
                 {/* Background decorative glow */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 blur-3xl rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
 
-                <div className="flex flex-col gap-3 relative z-10">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            {rankConfig && (
-                                <span className={clsx(
-                                    "text-xs font-black px-2 py-1 rounded-lg border backdrop-blur-md shadow-sm",
-                                    rankConfig.TextColor,
-                                    rankConfig.Border,
-                                    "bg-slate-950/50"
-                                )}>
-                                    {rankConfig.Rank}
-                                </span>
-                            )}
+                <div className="flex flex-col gap-2 relative z-10">
+                    {/* Row 1: Badge + Name */}
+                    <div className="flex items-center gap-3">
+                        {dungeon.difficulty ? (
                             <span className={clsx(
-                                "font-bold text-lg md:text-xl text-slate-100 transition-colors tracking-wide",
-                                !standalone && 'group-hover:text-cyan-300'
+                                "text-xs font-black px-2 py-1 rounded-lg border backdrop-blur-md shadow-sm",
+                                dungeon.difficulty === '简单' && "text-green-400 border-green-400/50 bg-green-500/10",
+                                dungeon.difficulty === '中等' && "text-blue-400 border-blue-400/50 bg-blue-500/10",
+                                dungeon.difficulty === '较难' && "text-yellow-400 border-yellow-400/50 bg-yellow-500/10",
+                                dungeon.difficulty === '难' && "text-orange-400 border-orange-400/50 bg-orange-500/10",
+                                dungeon.difficulty === '极难' && "text-red-400 border-red-400/50 bg-red-500/10 shadow-[0_0_10px_rgba(248,113,113,0.3)]",
                             )}>
-                                {dungeon.DungeonName}
+                                {dungeon.difficulty}
                             </span>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                            <span className="text-[10px] md:text-xs font-bold text-cyan-400 bg-cyan-500/10 px-2.5 py-0.5 rounded-full border border-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.1)]">
-                                {dungeon.Monsters.length} BOSS
+                        ) : rankConfig && (
+                            <span className={clsx(
+                                "text-xs font-black px-2 py-1 rounded-lg border backdrop-blur-md shadow-sm",
+                                rankConfig.TextColor,
+                                rankConfig.Border,
+                                "bg-slate-950/50"
+                            )}>
+                                {rankConfig.Rank}
                             </span>
-                            {standalone && <Sword className="w-4 h-4 text-cyan-500/50" />}
-                        </div>
+                        )}
+                        <span className={clsx(
+                            "font-bold text-lg md:text-xl text-slate-100 transition-colors tracking-wide",
+                            !standalone && 'group-hover:text-cyan-300'
+                        )}>
+                            {dungeon.DungeonName}
+                        </span>
                     </div>
 
-                    {power !== undefined && (
-                        <div className="flex items-baseline gap-1">
-                            <span className={clsx(
-                                "font-black text-2xl md:text-3xl tracking-tight",
-                                "text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-300"
-                            )}>
-                                {formatDamage(power, false)}
+                    {/* Row 2: Boss Info (Left) + Power (Right) */}
+                    <div className="flex items-center justify-between mt-1">
+                        <div className="flex items-center gap-2">
+                            <span className="flex items-center gap-1 text-[10px] md:text-xs font-bold text-slate-400 bg-slate-800/50 px-2.5 py-1 rounded-md border border-slate-700/50">
+                                <span className="text-cyan-400">{dungeon.Monsters.length}</span>
+                                <span>BOSS</span>
                             </span>
-                            <span className="text-xs font-bold text-slate-600">万</span>
                         </div>
-                    )}
+
+                        {power !== undefined && (
+                            <div className="flex items-center gap-2">
+                                <span className="text-[10px] text-slate-500 font-medium uppercase tracking-wider">
+                                    参考战力
+                                </span>
+                                <div className="flex items-baseline gap-0.5">
+                                    <span className={clsx(
+                                        "font-black text-xl md:text-2xl tracking-tight",
+                                        "text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-300"
+                                    )}>
+                                        {formatDamage(power, false)}
+                                    </span>
+                                    <span className="text-xs font-bold text-slate-600">万</span>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 

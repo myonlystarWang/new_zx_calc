@@ -80,6 +80,7 @@ export interface Dungeon {
   DungeonID: string;
   DungeonName: string; // Derived or separate metadata
   Description?: string;
+  difficulty?: string;
   Monsters: Monster[];
 }
 
