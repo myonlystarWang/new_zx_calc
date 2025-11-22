@@ -113,23 +113,23 @@ export const DungeonDetail: React.FC<DungeonDetailProps> = ({
                     </div>
 
                     {/* Row 2: Boss Info (Left) + Power (Right) */}
-                    <div className="flex items-center justify-between mt-1">
+                    <div className="flex items-end justify-between mt-3">
                         <div className="flex items-center gap-2">
-                            <span className="flex items-center gap-1 text-[10px] md:text-xs font-bold text-slate-400 bg-slate-800/50 px-2.5 py-1 rounded-md border border-slate-700/50">
-                                <span className="text-cyan-400">{dungeon.Monsters.length}</span>
-                                <span>BOSS</span>
+                            <span className="flex items-center gap-1.5 text-[10px] font-bold bg-slate-950/50 px-2 py-1 rounded border border-slate-800/80 shadow-inner">
+                                <span className="text-cyan-400 text-sm font-black">{dungeon.Monsters.length}</span>
+                                <span className="text-slate-600 tracking-wider">BOSS</span>
                             </span>
                         </div>
 
                         {power !== undefined && (
-                            <div className="flex items-center gap-2">
-                                <span className="text-[10px] text-slate-500 font-medium uppercase tracking-wider">
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-[11px] text-slate-600 font-bold tracking-wide mb-1">
                                     参考战力
                                 </span>
-                                <div className="flex items-baseline gap-0.5">
+                                <div className="flex items-baseline gap-1">
                                     <span className={clsx(
-                                        "font-black text-xl md:text-2xl tracking-tight",
-                                        "text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-300"
+                                        "font-black text-2xl md:text-3xl tracking-tighter leading-none",
+                                        "text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-cyan-200 to-blue-300 drop-shadow-sm"
                                     )}>
                                         {formatDamage(power, false)}
                                     </span>
