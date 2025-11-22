@@ -228,7 +228,7 @@ export const ResultSection: React.FC = () => {
                             const direction = Math.sign(effectiveOffset) || (baseOffset > 0 ? 1 : -1);
 
                             const rankConfig = getRankConfig(d.TotalDamage);
-                            const powerInWan = Math.round(d.TotalDamage / 10000);
+                            const powerRaw = d.TotalDamage;
 
                             // Continuous Transform Logic
                             // X Position: 0 -> 60% -> +15% per step
@@ -269,7 +269,7 @@ export const ResultSection: React.FC = () => {
                                         isExpanded={isActive}
                                         standalone={true}
                                         rankConfig={rankConfig}
-                                        power={powerInWan}
+                                        power={powerRaw}
                                     />
                                 </div>
                             );

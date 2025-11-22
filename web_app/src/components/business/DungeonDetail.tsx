@@ -126,26 +126,27 @@ export const DungeonDetail = React.memo<DungeonDetailProps>(({
 
                     {/* Row 2: Boss Info (Left) + Power (Right) */}
                     <div className="flex items-end justify-between mt-3">
-                        <div className="flex items-center gap-2">
-                            <span className="flex items-center gap-1.5 text-[10px] font-bold bg-slate-950/50 px-2 py-1 rounded border border-slate-800/80 shadow-inner">
-                                <span className="text-cyan-400 text-sm font-black">{dungeon.Monsters.length}</span>
-                                <span className="text-slate-600 tracking-wider">BOSS</span>
+                        <div className="flex items-baseline gap-1">
+                            <span className="font-black text-xl md:text-2xl text-cyan-400 leading-none">
+                                {dungeon.Monsters.length}
+                            </span>
+                            <span className="text-xs md:text-sm font-bold text-slate-600 tracking-wider mb-1">
+                                BOSS
                             </span>
                         </div>
 
                         {power !== undefined && (
                             <div className="flex items-baseline gap-2">
-                                <span className="text-[11px] text-slate-600 font-bold tracking-wide mb-1">
+                                <span className="text-xs md:text-sm text-slate-600 font-bold tracking-wide mb-1">
                                     参考战力
                                 </span>
                                 <div className="flex items-baseline gap-1">
                                     <span className={clsx(
-                                        "font-black text-2xl md:text-3xl tracking-tighter leading-none",
+                                        "font-black text-xl md:text-2xl tracking-tighter leading-none",
                                         "text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-cyan-200 to-blue-300 drop-shadow-sm"
                                     )}>
-                                        {formatDamage(power, false)}
+                                        {Math.round(power).toLocaleString()}
                                     </span>
-                                    <span className="text-xs font-bold text-slate-600">万</span>
                                 </div>
                             </div>
                         )}
