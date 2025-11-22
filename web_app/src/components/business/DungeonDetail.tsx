@@ -246,7 +246,7 @@ export const DungeonDetail = React.memo<DungeonDetailProps>(({
                                                         <td className="py-3 px-2 text-right relative">
                                                             {/* Damage Bar Background */}
                                                             <div
-                                                                className="absolute inset-y-1 right-1 bg-yellow-500/10 rounded-sm transition-all duration-500"
+                                                                className="absolute inset-y-1 right-1 bg-yellow-500/20 rounded-sm transition-all duration-500"
                                                                 style={{ width: `${barWidth * 0.95}%` }}
                                                             />
                                                             <span className="relative z-10 text-yellow-300 font-mono font-bold text-sm md:text-base shadow-black drop-shadow-sm whitespace-nowrap">
