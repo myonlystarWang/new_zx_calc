@@ -104,7 +104,7 @@ export const AttributePanel: React.FC<AttributePanelProps> = ({ attributes, onCh
             <div>
                 <h2 className="text-lg font-semibold text-slate-100 mb-4 flex items-center gap-2">
                     <span className="w-1 h-5 bg-gradient-to-b from-cyan-500 to-blue-500 rounded-full"></span>
-                    修炼星盘
+                    属性维度
                 </h2>
                 <div className="glass-panel p-4 bg-slate-800/50 flex items-center justify-center">
                     <AttributeRadarChart attributes={attributes} />

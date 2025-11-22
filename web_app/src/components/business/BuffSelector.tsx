@@ -68,13 +68,19 @@ export const BuffSelector: React.FC = () => {
             <h2 className="text-lg font-semibold text-slate-100 mb-4 flex items-center gap-2">
                 <span className="w-1 h-5 bg-gradient-to-b from-cyan-500 to-blue-500 rounded-full"></span>
                 战斗增益
+                <div
+                    className="ml-0.5 p-1 text-cyan-500/80 hover:text-cyan-400 cursor-pointer transition-colors hover:bg-cyan-500/10 rounded-full"
+                    onClick={() => setShowFocusInfo(true)}
+                    title="查看数值参考"
+                >
+                    <Info className="w-5 h-5" />
+                </div>
             </h2>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {visibleBuffs.map((buff) => {
                     const isActive = activeBuffIds.includes(buff.BuffID);
                     const currentValue = buffValues[buff.BuffID] ?? buff.DefaultEffectValue ?? 0;
-                    const isFocusBuff = buff.BuffName.includes('专注');
 
                     const defaults = { min: 0, max: 500, step: 1 };
                     const overrides = {
@@ -97,6 +103,7 @@ export const BuffSelector: React.FC = () => {
                                     : 'border-slate-700 hover:bg-slate-800/50'
                             )}
                         >
+
                             {/* Header: Icon & Name */}
                             <div className="flex items-center justify-center gap-3 relative z-10 w-full">
                                 <div className={clsx(
@@ -113,17 +120,6 @@ export const BuffSelector: React.FC = () => {
                                 )}>
                                     {buff.BuffName}
                                 </span>
-                                {isFocusBuff && (
-                                    <div
-                                        className="group/info relative p-1.5 -m-1.5 bg-slate-700/50 hover:bg-cyan-500/20 text-slate-400 hover:text-cyan-300 rounded-full transition-all shadow-sm border border-slate-600/50 hover:border-cyan-500/50"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setShowFocusInfo(true);
-                                        }}
-                                    >
-                                        <Info className="w-3.5 h-3.5" />
-                                    </div>
-                                )}
                             </div>
 
                             {/* Content: Value + Slider (Editable) OR Text (Fixed) */}
@@ -156,8 +152,12 @@ export const BuffSelector: React.FC = () => {
                                             }}
                                             onClick={(e) => e.stopPropagation()}
                                             className={clsx(
-                                                "w-full h-1.5 rounded-lg appearance-none cursor-pointer transition-colors",
-                                                isActive ? "bg-slate-600 accent-cyan-500 hover:accent-cyan-400" : "bg-slate-800 accent-slate-600"
+                                                "w-full h-1.5 appearance-none bg-transparent cursor-pointer focus:outline-none",
+                                                // Track styling
+                                                "[&::-webkit-slider-runnable-track]:w-full [&::-webkit-slider-runnable-track]:h-1.5 [&::-webkit-slider-runnable-track]:bg-slate-700 [&::-webkit-slider-runnable-track]:rounded-full",
+                                                // Thumb styling
+                                                "[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:mt-[-5px] [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:hover:scale-110",
+                                                isActive ? "[&::-webkit-slider-thumb]:bg-cyan-400" : "[&::-webkit-slider-thumb]:bg-slate-600"
                                             )}
                                             disabled={!isActive}
                                         />
@@ -172,10 +172,7 @@ export const BuffSelector: React.FC = () => {
                                 )}
                             </div>
 
-                            {/* Active Indicator Bar */}
-                            {isActive && (
-                                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-80" />
-                            )}
+
                         </div>
                     );
                 })}

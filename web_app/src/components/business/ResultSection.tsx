@@ -201,10 +201,10 @@ export const ResultSection: React.FC = () => {
 
             {/* Dungeon Navigator Carousel (3D Stack) */}
             <div className="relative w-full flex flex-col items-center gap-4">
-                <h3 className="text-base font-semibold text-slate-100 flex items-center gap-2 px-1 self-start">
-                    <span className="w-1 h-4 bg-gradient-to-b from-cyan-500 to-purple-500 rounded-full"></span>
+                <h2 className="text-lg font-semibold text-slate-100 flex items-center gap-2 self-start">
+                    <span className="w-1 h-5 bg-gradient-to-b from-cyan-500 to-blue-500 rounded-full"></span>
                     副本战力分析
-                </h3>
+                </h2>
 
                 <div
                     ref={containerRef}
