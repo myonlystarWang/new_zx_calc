@@ -260,7 +260,7 @@ export const ResultSection: React.FC = () => {
                                         transform: `translateX(${xPercent}%) scale(${scale}) translateZ(${translateZ}px) rotateY(${rotateY}deg)`,
                                         zIndex: 50 - Math.round(absOffset),
                                         opacity: opacity,
-                                        filter: `blur(${absOffset * 2}px) brightness(${1 - absOffset * 0.1})`,
+                                        willChange: 'transform',
                                         transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)'
                                     }}
                                 >
