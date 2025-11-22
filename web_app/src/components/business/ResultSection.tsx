@@ -208,13 +208,13 @@ export const ResultSection: React.FC = () => {
 
                 <div
                     ref={containerRef}
-                    className="relative w-full h-[600px] flex items-center justify-center perspective-1000 touch-pan-y overflow-hidden"
+                    className="relative w-full h-[650px] flex items-start justify-center pt-12 perspective-1000 touch-pan-y overflow-hidden"
                     onTouchStart={handleTouchStart}
                     onTouchMove={handleTouchMove}
                     onTouchEnd={handleTouchEnd}
                 >
                     {/* Cards Container */}
-                    <div className="relative w-full h-full flex items-center justify-center transform-style-3d">
+                    <div className="relative w-full h-full flex items-start justify-center transform-style-3d">
                         {results.dungeonPowers.map((d, index) => {
                             const activeIndex = results.dungeonPowers.findIndex(dp => dp.DungeonID === selectedDungeonId);
                             const baseOffset = index - activeIndex;
@@ -253,8 +253,8 @@ export const ResultSection: React.FC = () => {
                                     key={d.DungeonID}
                                     onClick={() => !isDragging && setSelectedDungeonId(d.DungeonID)}
                                     className={clsx(
-                                        "absolute ease-out cursor-pointer origin-center",
-                                        isActive ? "z-50 w-full md:w-[90%] max-w-5xl h-full" : "w-[85%] md:w-[80%] h-[90%]"
+                                        "absolute ease-out cursor-pointer origin-top",
+                                        isActive ? "z-50 w-full md:w-[90%] max-w-5xl h-auto" : "w-[85%] md:w-[80%] h-auto"
                                     )}
                                     style={{
                                         transform: `translateX(${xPercent}%) scale(${scale}) translateZ(${translateZ}px) rotateY(${rotateY}deg)`,
@@ -277,6 +277,6 @@ export const ResultSection: React.FC = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };

@@ -68,10 +68,7 @@ export const DungeonDetail: React.FC<DungeonDetailProps> = ({
     const maxAvgDamage = skillDamages.length > 0 ? Math.max(...skillDamages.map(s => s.dmg.avgFinalDamage)) : 0;
 
     return (
-        <div className={clsx(
-            "glass-panel overflow-hidden transition-all duration-300",
-            standalone ? 'h-full flex flex-col' : ''
-        )}>
+        <div className="glass-panel overflow-hidden transition-all duration-300">
             {/* Header - Optimized Layout */}
             <div
                 onClick={standalone ? undefined : onToggle}
@@ -146,10 +143,7 @@ export const DungeonDetail: React.FC<DungeonDetailProps> = ({
 
             {/* Expanded Content */}
             {showContent && (
-                <div className={clsx(
-                    "border-t border-slate-700/50 bg-slate-900/30 flex flex-col",
-                    standalone ? 'flex-1 overflow-hidden' : ''
-                )}>
+                <div className="border-t border-slate-700/50 bg-slate-900/30 flex flex-col">
                     {/* Boss Tabs Navigation - Clean Scrollable List */}
                     <div className="flex items-center gap-1 md:gap-2 px-2 py-2 border-b border-slate-700/30 bg-slate-900/50">
                         <div
@@ -202,20 +196,19 @@ export const DungeonDetail: React.FC<DungeonDetailProps> = ({
 
                     {/* Selected Boss Data */}
                     {selectedMonster && (
-                        <div className={clsx(
-                            "animate-fade-in",
-                            standalone ? 'flex-1 overflow-y-auto' : ''
-                        )}>
+                        <div className="animate-fade-in"
+                            onTouchStart={(e) => e.stopPropagation()}
+                        >
                             <div className="p-3 md:p-4">
                                 {/* Skills Damage Table */}
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-sm">
                                         <thead>
                                             <tr className="border-b border-slate-700/50">
-                                                <th className="text-left py-2 px-2 text-slate-400 font-medium text-xs whitespace-nowrap w-1/3">技能</th>
-                                                <th className="hidden md:table-cell text-right py-2 px-2 text-slate-400 font-medium text-xs whitespace-nowrap">最小伤害</th>
-                                                <th className="hidden md:table-cell text-right py-2 px-2 text-slate-400 font-medium text-xs whitespace-nowrap">最大伤害</th>
-                                                <th className="text-right py-2 px-2 text-slate-400 font-medium text-xs whitespace-nowrap w-1/3">平均伤害</th>
+                                                <th className="text-left py-2 px-2 text-slate-400 font-medium text-xs whitespace-nowrap w-1/2">技能</th>
+                                                <th className="hidden text-right py-2 px-2 text-slate-400 font-medium text-xs whitespace-nowrap">最小伤害</th>
+                                                <th className="hidden text-right py-2 px-2 text-slate-400 font-medium text-xs whitespace-nowrap">最大伤害</th>
+                                                <th className="text-right py-2 px-2 text-slate-400 font-medium text-xs whitespace-nowrap w-1/2">平均伤害</th>
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-slate-700/30">
@@ -226,16 +219,16 @@ export const DungeonDetail: React.FC<DungeonDetailProps> = ({
                                                     <tr key={skill.SkillID} className="hover:bg-slate-800/30 transition-colors group relative">
                                                         <td className="py-3 px-2 text-slate-200 font-medium relative z-10 whitespace-nowrap">
                                                             <div>{skill.SkillName}</div>
-                                                            <div className="md:hidden text-[10px] text-slate-500 mt-0.5 font-mono flex items-center gap-1">
-                                                                <span className="text-cyan-500/70">{formatDamage(dmg.minFinalDamage, false)}</span>
-                                                                <span className="text-slate-600">/</span>
-                                                                <span className="text-purple-500/70">{formatDamage(dmg.maxFinalDamage)}</span>
+                                                            <div className="text-xs md:text-sm text-slate-400 mt-1 font-mono flex items-center gap-1.5">
+                                                                <span className="text-cyan-400 font-semibold">{formatDamage(dmg.minFinalDamage, false)}</span>
+                                                                <span className="text-slate-500">~</span>
+                                                                <span className="text-purple-400 font-semibold">{formatDamage(dmg.maxFinalDamage)}</span>
                                                             </div>
                                                         </td>
-                                                        <td className="hidden md:table-cell py-3 px-2 text-right text-cyan-300 font-mono text-sm font-medium relative z-10 whitespace-nowrap">
+                                                        <td className="hidden py-3 px-2 text-right text-cyan-300 font-mono text-sm font-medium relative z-10 whitespace-nowrap">
                                                             {formatDamage(dmg.minFinalDamage)}
                                                         </td>
-                                                        <td className="hidden md:table-cell py-3 px-2 text-right text-purple-300 font-mono text-sm font-medium relative z-10 whitespace-nowrap">
+                                                        <td className="hidden py-3 px-2 text-right text-purple-300 font-mono text-sm font-medium relative z-10 whitespace-nowrap">
                                                             {formatDamage(dmg.maxFinalDamage)}
                                                         </td>
                                                         <td className="py-3 px-2 text-right relative">
