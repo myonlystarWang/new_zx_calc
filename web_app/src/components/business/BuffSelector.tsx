@@ -34,12 +34,33 @@ export const BuffSelector: React.FC = () => {
 
         return effects.length > 0 ? effects.join(', ') : buff.BuffName;
     };
-
     const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>, buffId: string) => {
         const val = parseFloat(e.target.value);
         if (!isNaN(val)) {
             updateBuffValue(buffId, val);
         }
+    };
+
+    const [showFocusInfo, setShowFocusInfo] = React.useState(false);
+    const [activeTab, setActiveTab] = React.useState<'general' | 'support' | 'dps'>('support');
+
+    const focusData = {
+        general: [
+            { name: '三碗专注', val: '20', note: '', total: 20 }
+        ],
+        support: [
+            { name: '天音', val: '18 + 2', note: '法宝技能+1', total: 20 },
+            { name: '天华', val: '(40+2) + (18+2)', note: '均为法宝技能+1', total: 62 },
+            { name: '焚香', val: '30', note: '', total: 30 },
+            { name: '画影', val: '24 + 3 + X', note: '法宝技能+1，每40万真气X+1', total: '27+' },
+            { name: '昭冥', val: '52.5 + 7.5', note: '需132万真气以上', total: 60 },
+        ],
+        dps: [
+            { name: '逐霜', val: '79 / 49', note: '仙 / 魔佛', total: '79/49' },
+            { name: '归云', val: '90 / 30', note: '魔 / 仙佛', total: '90/30' },
+            { name: '青云', val: '50 / 30', note: '仙 / 魔佛', total: '50/30' },
+            { name: '涅羽', val: '70 + X', note: '每10万真气X+1', total: '70+' },
+        ]
     };
 
     return (
@@ -70,7 +91,7 @@ export const BuffSelector: React.FC = () => {
                             key={buff.BuffID}
                             onClick={() => toggleBuff(buff.BuffID)}
                             className={clsx(
-                                'glass-panel p-4 transition-all duration-300 hover:border-cyan-500/50 cursor-pointer group relative overflow-hidden flex flex-col gap-3 items-center',
+                                'glass-panel p-4 transition-all duration-300 hover:border-cyan-500/50 cursor-pointer group relative flex flex-col gap-3 items-center',
                                 isActive
                                     ? 'border-cyan-500/70 bg-cyan-500/10 shadow-[0_0_15px_rgba(6,182,212,0.15)]'
                                     : 'border-slate-700 hover:bg-slate-800/50'
@@ -93,23 +114,14 @@ export const BuffSelector: React.FC = () => {
                                     {buff.BuffName}
                                 </span>
                                 {isFocusBuff && (
-                                    <div className="group/info relative" onClick={(e) => e.stopPropagation()}>
-                                        <Info className="w-3.5 h-3.5 text-slate-500 hover:text-cyan-400 cursor-help" />
-                                        <div className="absolute left-1/2 bottom-full mb-2 -translate-x-1/2 w-64 p-3 bg-slate-900/95 border border-slate-700 rounded-lg text-xs text-slate-300 shadow-xl opacity-0 group-hover/info:opacity-100 transition-opacity pointer-events-none z-50 text-left">
-                                            <div className="font-bold text-cyan-400 mb-1">专注值参考：</div>
-                                            <ul className="space-y-1">
-                                                <li>三碗专注：20</li>
-                                                <li>天音专注：18+2</li>
-                                                <li>天华专注：40+2+18+2</li>
-                                                <li>焚香专注：30</li>
-                                                <li>画影专注：24+3+X (每40万真气+1)</li>
-                                                <li>挂件专注：52.5+7.5 (需132万真气)</li>
-                                                <li>逐霜专注：79/49 (仙/魔佛)</li>
-                                                <li>归云专注：90/30 (魔/仙佛)</li>
-                                                <li>青云专注：50/30 (仙/魔佛)</li>
-                                                <li>涅羽专注：70+X (每10万真气+1)</li>
-                                            </ul>
-                                        </div>
+                                    <div
+                                        className="group/info relative p-1.5 -m-1.5 bg-slate-700/50 hover:bg-cyan-500/20 text-slate-400 hover:text-cyan-300 rounded-full transition-all shadow-sm border border-slate-600/50 hover:border-cyan-500/50"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setShowFocusInfo(true);
+                                        }}
+                                    >
+                                        <Info className="w-3.5 h-3.5" />
                                     </div>
                                 )}
                             </div>
@@ -168,6 +180,101 @@ export const BuffSelector: React.FC = () => {
                     );
                 })}
             </div>
+
+            {/* Focus Info Modal */}
+            {showFocusInfo && (
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in"
+                    onClick={() => setShowFocusInfo(false)}
+                >
+                    <div
+                        className="bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-scale-in flex flex-col max-h-[80vh]"
+                        onClick={e => e.stopPropagation()}
+                    >
+                        {/* Modal Header */}
+                        <div className="p-5 border-b border-slate-800 bg-slate-800/50 flex items-center justify-between shrink-0">
+                            <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
+                                <div className="p-1.5 rounded-lg bg-cyan-500/20 text-cyan-400">
+                                    <Info className="w-5 h-5" />
+                                </div>
+                                专注值参考
+                            </h3>
+                            <button
+                                onClick={() => setShowFocusInfo(false)}
+                                className="p-1.5 rounded-lg hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+                            >
+                                <span className="sr-only">Close</span>
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        {/* Tabs */}
+                        <div className="p-2 bg-slate-900/50 border-b border-slate-800 flex gap-1 shrink-0">
+                            {[
+                                { id: 'support', label: '辅助职业' },
+                                { id: 'dps', label: '输出职业' },
+                                { id: 'general', label: '通用' },
+                            ].map(tab => (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id as any)}
+                                    className={clsx(
+                                        "flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all",
+                                        activeTab === tab.id
+                                            ? "bg-slate-800 text-cyan-400 shadow-sm border border-slate-700"
+                                            : "text-slate-500 hover:text-slate-300 hover:bg-slate-800/50"
+                                    )}
+                                >
+                                    {tab.label}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Content Area */}
+                        <div className="p-4 overflow-y-auto custom-scrollbar">
+                            <div className="space-y-3">
+                                {focusData[activeTab].map((item, idx) => (
+                                    <div key={idx} className="bg-slate-800/40 rounded-xl p-4 border border-slate-700/50 hover:border-cyan-500/30 transition-colors group">
+                                        <div className="flex justify-between items-start mb-2">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-base font-bold text-slate-200 group-hover:text-cyan-100 transition-colors">
+                                                    {item.name}
+                                                </span>
+                                            </div>
+                                            <div className="flex flex-col items-end">
+                                                <span className="text-xl font-black text-cyan-400 leading-none">
+                                                    {item.total}
+                                                </span>
+                                                <span className="text-[10px] text-cyan-500/60 font-medium mt-0.5 uppercase tracking-wider">Total</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="bg-slate-900/50 rounded-lg p-2.5 border border-slate-800/50 flex justify-between items-center">
+                                            <span className="text-xs text-slate-500 font-medium truncate mr-2" title={item.note}>
+                                                {item.note || '基础数值'}
+                                            </span>
+                                            <span className="font-mono text-sm text-slate-300 font-semibold whitespace-nowrap">
+                                                {item.val}
+                                            </span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="p-4 border-t border-slate-800 bg-slate-800/30 shrink-0">
+                            <button
+                                onClick={() => setShowFocusInfo(false)}
+                                className="w-full py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-xl shadow-lg shadow-cyan-900/20 transition-all active:scale-[0.98]"
+                            >
+                                明白
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
