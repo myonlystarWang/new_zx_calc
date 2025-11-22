@@ -19,7 +19,7 @@ export const FactionSelector: React.FC = () => {
                 阵营选择
             </h2>
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-2 md:gap-4">
                 {FACTIONS.map((faction) => {
                     const isActive = userCharacter.Faction === faction.id;
 
@@ -54,22 +54,22 @@ export const FactionSelector: React.FC = () => {
                             key={faction.id}
                             onClick={() => updateCharacterClass(userCharacter.ClassID, faction.id as any)}
                             className={clsx(
-                                'glass-panel p-6 cursor-pointer transition-all duration-300 group relative overflow-hidden',
+                                'glass-panel p-3 md:p-6 cursor-pointer transition-all duration-300 group relative overflow-hidden',
                                 isActive ? colors.active : `border-slate-700 hover:bg-slate-800/50 ${colors.hover}`
                             )}
                         >
-                            <div className="flex flex-col items-center gap-3 text-center relative z-10">
+                            <div className="flex flex-col items-center gap-1 md:gap-3 text-center relative z-10">
                                 <div className={clsx(
-                                    'p-4 rounded-xl transition-all duration-300',
+                                    'p-2 md:p-4 rounded-xl transition-all duration-300',
                                     isActive
                                         ? `${colors.icon} scale-110`
                                         : 'bg-slate-800/50 text-slate-400 group-hover:bg-slate-700/50'
                                 )}>
-                                    <Swords className="w-6 h-6" />
+                                    <Swords className="w-4 h-4 md:w-6 md:h-6" />
                                 </div>
 
                                 <span className={clsx(
-                                    'font-bold text-xl',
+                                    'font-bold text-sm md:text-xl',
                                     isActive ? colors.text : 'text-slate-300'
                                 )}>
                                     {faction.name}
