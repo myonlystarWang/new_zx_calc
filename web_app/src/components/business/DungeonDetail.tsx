@@ -68,7 +68,16 @@ export const DungeonDetail: React.FC<DungeonDetailProps> = ({
     const maxAvgDamage = skillDamages.length > 0 ? Math.max(...skillDamages.map(s => s.dmg.avgFinalDamage)) : 0;
 
     return (
-        <div className="glass-panel overflow-hidden transition-all duration-300">
+        <div className={clsx(
+            "relative overflow-hidden transition-all duration-300 rounded-2xl",
+            "bg-gradient-to-br from-slate-800/90 via-slate-900/90 to-slate-950/95",
+            "backdrop-blur-xl",
+            "border border-white/10",
+            "shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)]"
+        )}>
+            {/* Ambient Glow Effects */}
+            <div className="absolute -top-24 -right-24 w-64 h-64 bg-cyan-500/10 blur-[60px] rounded-full pointer-events-none mix-blend-screen"></div>
+            <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-blue-600/10 blur-[60px] rounded-full pointer-events-none mix-blend-screen"></div>
             {/* Header - Optimized Layout */}
             <div
                 onClick={standalone ? undefined : onToggle}
