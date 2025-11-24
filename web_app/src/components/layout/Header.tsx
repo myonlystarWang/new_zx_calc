@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Calculator, Users } from 'lucide-react';
+import { Calculator } from 'lucide-react';
 
 export const Header: React.FC = () => {
     useEffect(() => {
