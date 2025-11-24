@@ -105,7 +105,7 @@
       "MonsterName": "修罗鸟",
       "DungeonLevel": 1,
       "MonsterAttributeModifiers": {
-        "MonsterCriticalDamagePercentReduction": 990 
+        "MonsterCriticalDamagePercentReduction": 990
       }
     },
     {
@@ -241,7 +241,7 @@
       }
     }
   ],
-  "HUIMENG_LINGYUN_T16": [  
+  "HUIMENG_LINGYUN_T16": [
     {
       "MonsterID": "QIAN_HUANG_T16",
       "MonsterName": "乾荒",
@@ -323,8 +323,8 @@
       "MonsterAttributeModifiers": {
         "MonsterCriticalDamagePercentReduction": 1100
       }
-    }    
-  ],    
+    }
+  ],
   "HUIMENG_LINGYUN_T18": [
     {
       "MonsterID": "QIAN_HUANG_T18",
@@ -365,7 +365,157 @@
       "MonsterAttributeModifiers": {
         "MonsterCriticalDamagePercentReduction": 1200
       }
-    }        
+    }
+  ],
+  "ZHENHAI_DUANLANG_T19": [
+    {
+      "MonsterID": "CHI_SUO_T19",
+      "MonsterName": "赤梭",
+      "DungeonLevel": 1,
+      "MonsterAttributeModifiers": {
+        "MonsterCriticalDamagePercentReduction": 1300
+      }
+    },
+    {
+      "MonsterID": "XUAN_KAI_T19",
+      "MonsterName": "玄铠",
+      "DungeonLevel": 1,
+      "MonsterAttributeModifiers": {
+        "MonsterCriticalDamagePercentReduction": 1450
+      }
+    },
+    {
+      "MonsterID": "WANG_CHAO_T19",
+      "MonsterName": "望潮",
+      "DungeonLevel": 2,
+      "MonsterAttributeModifiers": {
+        "MonsterCriticalDamagePercentReduction": 1400
+      }
+    },
+    {
+      "MonsterID": "LIE_HUN_T19",
+      "MonsterName": "裂魂",
+      "DungeonLevel": 3,
+      "MonsterAttributeModifiers": {
+        "MonsterCriticalDamagePercentReduction": 1350
+      }
+    },
+    {
+      "MonsterID": "LI_YIN_T19",
+      "MonsterName": "璃音",
+      "DungeonLevel": 4,
+      "MonsterAttributeModifiers": {
+        "MonsterCriticalDamagePercentReduction": 1400
+      }
+    },
+    {
+      "MonsterID": "CANG_YUAN_T19",
+      "MonsterName": "沧渊",
+      "DungeonLevel": 5,
+      "MonsterAttributeModifiers": {
+        "MonsterCriticalDamagePercentReduction": 1400
+      }
+    }
+  ],
+  "ZHENHAI_DUANLANG_T20": [
+    {
+      "MonsterID": "CHI_SUO_T20",
+      "MonsterName": "赤梭",
+      "DungeonLevel": 1,
+      "MonsterAttributeModifiers": {
+        "MonsterCriticalDamagePercentReduction": 1500
+      }
+    },
+    {
+      "MonsterID": "XUAN_KAI_T20",
+      "MonsterName": "玄铠",
+      "DungeonLevel": 1,
+      "MonsterAttributeModifiers": {
+        "MonsterCriticalDamagePercentReduction": 1700
+      }
+    },
+    {
+      "MonsterID": "WANG_CHAO_T20",
+      "MonsterName": "望潮",
+      "DungeonLevel": 2,
+      "MonsterAttributeModifiers": {
+        "MonsterCriticalDamagePercentReduction": 1650
+      }
+    },
+    {
+      "MonsterID": "LIE_HUN_T20",
+      "MonsterName": "裂魂",
+      "DungeonLevel": 3,
+      "MonsterAttributeModifiers": {
+        "MonsterCriticalDamagePercentReduction": 1550
+      }
+    },
+    {
+      "MonsterID": "LI_YIN_T20",
+      "MonsterName": "璃音",
+      "DungeonLevel": 4,
+      "MonsterAttributeModifiers": {
+        "MonsterCriticalDamagePercentReduction": 1600
+      }
+    },
+    {
+      "MonsterID": "CANG_YUAN_T20",
+      "MonsterName": "沧渊",
+      "DungeonLevel": 5,
+      "MonsterAttributeModifiers": {
+        "MonsterCriticalDamagePercentReduction": 1650
+      }
+    }
+  ],
+  "ZHENHAI_DUANLANG_T21": [
+    {
+      "MonsterID": "CHI_SUO_T21",
+      "MonsterName": "赤梭",
+      "DungeonLevel": 1,
+      "MonsterAttributeModifiers": {
+        "MonsterCriticalDamagePercentReduction": 1600
+      }
+    },
+    {
+      "MonsterID": "XUAN_KAI_T21",
+      "MonsterName": "玄铠",
+      "DungeonLevel": 1,
+      "MonsterAttributeModifiers": {
+        "MonsterCriticalDamagePercentReduction": 1800
+      }
+    },
+    {
+      "MonsterID": "WANG_CHAO_T21",
+      "MonsterName": "望潮",
+      "DungeonLevel": 2,
+      "MonsterAttributeModifiers": {
+        "MonsterCriticalDamagePercentReduction": 1750
+      }
+    },
+    {
+      "MonsterID": "LIE_HUN_T21",
+      "MonsterName": "裂魂",
+      "DungeonLevel": 3,
+      "MonsterAttributeModifiers": {
+        "MonsterCriticalDamagePercentReduction": 1650
+      }
+    },
+    {
+      "MonsterID": "LI_YIN_T21",
+      "MonsterName": "璃音",
+      "DungeonLevel": 4,
+      "MonsterAttributeModifiers": {
+        "MonsterCriticalDamagePercentReduction": 1700
+      }
+    },
+    {
+      "MonsterID": "CANG_YUAN_T21",
+      "MonsterName": "沧渊",
+      "DungeonLevel": 5,
+      "MonsterAttributeModifiers": {
+        "MonsterCriticalDamagePercentReduction": 1700
+      }
+    }
   ],
   "TIANDI_BAOKU_NORMAL": [
     {

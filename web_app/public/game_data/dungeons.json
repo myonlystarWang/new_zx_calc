@@ -1,12 +1,5 @@
 [
   {
-    "DungeonID": "SIXIANG_QI",
-    "DungeonName": "试炼·四象五行（七杀罪狱）",
-    "Description": "与四象之力相关的试炼之地，可获取幻灵石礼包、混沌石、覆天石、覆天印等高级奖励。",
-    "difficulty": "难",
-    "DungeonImportanceWeight": 1
-  },
-  {
     "DungeonID": "HUIMENG_LINGYUN_T16",
     "DungeonName": "会盟！凌云诛众仙（T16）",
     "Description": "【会盟！凌云诛众仙】系列日常团队副本之一，低级难度。",
@@ -25,6 +18,34 @@
     "DungeonName": "会盟！凌云诛众仙（T18）",
     "Description": "【会盟！凌云诛众仙】系列日常团队副本之一，顶级难度。",
     "difficulty": "较难",
+    "DungeonImportanceWeight": 1
+  },
+  {
+    "DungeonID": "ZHENHAI_DUANLANG_T19",
+    "DungeonName": "镇海！断浪碎晶宫（T19）",
+    "Description": "【镇海！断浪碎晶宫】系列日常团队副本之一，低级难度。",
+    "difficulty": "较难",
+    "DungeonImportanceWeight": 1
+  },
+  {
+    "DungeonID": "ZHENHAI_DUANLANG_T20",
+    "DungeonName": "镇海！断浪碎晶宫（T20）",
+    "Description": "【镇海！断浪碎晶宫】系列日常团队副本之一，中级难度。",
+    "difficulty": "难",
+    "DungeonImportanceWeight": 1
+  },
+  {
+    "DungeonID": "ZHENHAI_DUANLANG_T21",
+    "DungeonName": "镇海！断浪碎晶宫（T21）",
+    "Description": "【镇海！断浪碎晶宫】系列日常团队副本之一，顶级难度。",
+    "difficulty": "极难",
+    "DungeonImportanceWeight": 1
+  },
+  {
+    "DungeonID": "SIXIANG_QI",
+    "DungeonName": "试炼·四象五行（七杀罪狱）",
+    "Description": "与四象之力相关的试炼之地，可获取幻灵石礼包、混沌石、覆天石、覆天印等高级奖励。",
+    "difficulty": "难",
     "DungeonImportanceWeight": 1
   },
   {
@@ -49,13 +70,6 @@
     "DungeonImportanceWeight": 1
   },
   {
-    "DungeonID": "XUANYELIN_QIWEI_WUGONG",
-    "DungeonName": "悬夜林（七尾蜈蚣）",
-    "Description": "传说中拥有七条尾巴的巨大蜈蚣，可获取百足金箱、百足音箱等奖励。",
-    "difficulty": "极难",
-    "DungeonImportanceWeight": 1
-  },
-  {
     "DungeonID": "JIEQI_KONGSANG_NORMAL",
     "DungeonName": "劫起空桑（普通）",
     "Description": "空桑山发生的劫难，考验队伍的综合实力与配合，普通难度，可获取九纹琅、高级星辰、昭武/彰武装备、幻灵石礼包、风云印、铁玉等奖励。",
@@ -71,16 +85,16 @@
   },
   {
     "DungeonID": "SHOUSHEN_JIANGLIN_NORMAL",
-    "DungeonName": "兽神降临（普通）",
+    "DungeonName": "兽神降临",
     "Description": "强大的兽神降临人间，需要仙友合力挑战，普通难度，可获取九纹琅、高级星辰、昭武装备、风云印、铁玉等奖励。",
     "difficulty": "中等",
     "DungeonImportanceWeight": 1
   },
   {
-    "DungeonID": "SHOUSHEN_JIANGLIN_HARD",
-    "DungeonName": "兽神降临（困难）",
-    "Description": "强大的兽神降临人间，需要仙友合力挑战，高级难度，可获取九纹琅、高级星辰、昭武装备、风云印、铁玉等奖励。",
-    "difficulty": "较难",
+    "DungeonID": "XUANYELIN_QIWEI_WUGONG",
+    "DungeonName": "悬夜林（七尾蜈蚣）",
+    "Description": "传说中拥有七条尾巴的巨大蜈蚣，可获取百足金箱、百足音箱等奖励。",
+    "difficulty": "极难",
     "DungeonImportanceWeight": 1
   }
 ]
