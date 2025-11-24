@@ -10,11 +10,13 @@ export const Header: React.FC = () => {
                         <Calculator className="w-6 h-6 md:w-8 md:h-8 text-cyan-400" />
                     </div>
                     <div>
-                        <h1 className="text-xl md:text-2xl font-bold text-gradient tracking-tight">
+                        <h1 className="text-2xl md:text-3xl font-black text-gradient tracking-tight drop-shadow-sm">
                             诛仙3副本战力计算器
                         </h1>
-                        <p className="text-xs text-slate-400 font-mono tracking-wider">
-                            V 2.0.1 | by 星耀-萝卜
+                        <p className="text-sm text-slate-400 font-mono tracking-wider mt-1 flex items-center gap-2">
+                            <span className="px-1.5 py-0.5 rounded bg-slate-800/80 border border-slate-700/50 text-cyan-400/80 text-xs font-bold">V 2.0.1</span>
+                            <span className="w-1 h-1 rounded-full bg-slate-600"></span>
+                            <span>by 星耀-萝卜</span>
                         </p>
                     </div>
                 </div>
