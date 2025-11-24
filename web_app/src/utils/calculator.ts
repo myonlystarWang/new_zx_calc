@@ -134,7 +134,7 @@ export const calculateDamage = (
     // If CritDmgTotal is e.g. 500, multiplier is 5.0.
     const critMultiplier = Math.max(1, critDmgTotal / 100);
 
-    const damageBonusMultiplier = 1 + (skillBonus.SkillDamageBonus || 0); // Assuming 1 = +100%
+    const damageBonusMultiplier = skillBonus.SkillDamageBonus !== undefined ? skillBonus.SkillDamageBonus : 1;
 
     const charMonDmgInc = 1 + character.CharacterMonsterDamageIncreasePercent / 100;
 
