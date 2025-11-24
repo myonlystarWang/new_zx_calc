@@ -34,8 +34,8 @@ const defaultCharacter: UserCharacter = {
     UserID: 'guest',
     CharacterID: 'char_01',
     CharacterName: '道友',
-    ClassID: 'QING_YUN',
-    Faction: 'XIAN',
+    ClassID: 'ZHU_SHUANG',
+    Faction: 'MO',
     Level: 170,
     BaseAttributes: defaultAttributes
 };
