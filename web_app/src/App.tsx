@@ -3,7 +3,7 @@ import { AppProvider, useApp } from './context/AppContext';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { AttributePanel } from './components/business/AttributePanel';
-import { ResultSection } from './components/business/ResultSection';
+import { ResultSection } from './components/business/ResultsSection';
 
 const MainContent: React.FC = () => {
   const { isLoading, userCharacter, updateCharacterAttributes } = useApp();
