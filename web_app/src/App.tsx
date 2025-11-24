@@ -1,6 +1,7 @@
 import React from 'react';
 import { AppProvider, useApp } from './context/AppContext';
 import { Header } from './components/layout/Header';
+import { Footer } from './components/layout/Footer';
 import { AttributePanel } from './components/business/AttributePanel';
 import { ResultSection } from './components/business/ResultSection';
 
@@ -38,6 +39,8 @@ const MainContent: React.FC = () => {
           </div>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 };
