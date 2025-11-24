@@ -32,8 +32,8 @@ export const Header: React.FC = () => {
                             </p>
 
                             <span id="busuanzi_container_site_uv" className="hidden md:flex items-center gap-1.5 text-xs text-slate-500 bg-slate-800/30 px-2 py-0.5 rounded-full border border-slate-700/30 whitespace-nowrap">
-                                <Users className="w-3 h-3" />
-                                <span>访客: <span id="busuanzi_value_site_uv" className="font-mono text-slate-400">--</span></span>
+                                {/* <Users className="w-3 h-3" /> */}
+                                <span >访客: <span id="busuanzi_value_site_uv" className="font-mono text-slate-400">--</span></span>
                             </span>
                         </div>
                     </div>
