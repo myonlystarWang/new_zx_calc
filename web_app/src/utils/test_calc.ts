@@ -1,5 +1,5 @@
 import { calculateMonsterPower, calculateDamage } from './calculator';
-import { CharacterAttributes, Skill, Monster, Buff } from '../types';
+import type { CharacterAttributes, Skill, Monster, Buff } from '../types';
 
 const mockChar: CharacterAttributes = {
     CharacterMinAttack: 1000,
@@ -61,7 +61,6 @@ console.log('Actual Avg:', dmg.avgFinalDamage);
 // Or I can just trust the formula implementation `total += avg * weight`.
 // Let's just check if the summation works.
 
-const skillA = { ...mockSkillA, SkillImportanceWeight: 1.0 }; // We will override calculateDamage return for this test? 
 // No, I can't easily override the internal call. 
 // I'll just create skills that result in those damages.
 // If Char has 0 attack, and Skill has Fixed Bonus = 100.

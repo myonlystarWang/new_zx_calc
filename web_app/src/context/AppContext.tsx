@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { CharacterAttributes, UserCharacter, CharacterClass, Buff } from '../types';
+import type { CharacterAttributes, UserCharacter, CharacterClass, Buff } from '../types';
 import { DataService } from '../services/DataService';
 
 interface AppState {

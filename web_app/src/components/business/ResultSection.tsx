@@ -48,20 +48,63 @@ export const ResultSection: React.FC = () => {
         }
     }, [results.dungeonPowers, selectedDungeonId]);
 
+    const RANK_STYLES: Record<string, any> = {
+        'SSS': {
+            Color: 'bg-yellow-500/10',
+            Shadow: 'shadow-[0_0_20px_rgba(234,179,8,0.4)]',
+            Border: 'border border-yellow-400',
+            TextColor: 'text-yellow-400',
+            Glow: 'drop-shadow-[0_0_10px_rgba(234,179,8,0.6)]'
+        },
+        'SS': {
+            Color: 'bg-purple-500/10',
+            Shadow: 'shadow-[0_0_15px_rgba(168,85,247,0.4)]',
+            Border: 'border border-purple-400',
+            TextColor: 'text-purple-400',
+            Glow: 'drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]'
+        },
+        'S': {
+            Color: 'bg-blue-500/10',
+            Shadow: 'shadow-[0_0_15px_rgba(59,130,246,0.4)]',
+            Border: 'border border-blue-400',
+            TextColor: 'text-blue-400',
+            Glow: 'drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]'
+        },
+        'A': {
+            Color: 'bg-cyan-500/10',
+            Shadow: 'shadow-[0_0_15px_rgba(34,211,238,0.4)]',
+            Border: 'border border-cyan-400',
+            TextColor: 'text-cyan-400',
+            Glow: ''
+        },
+        'B': {
+            Color: 'bg-emerald-500/10',
+            Shadow: 'shadow-[0_0_10px_rgba(52,211,153,0.4)]',
+            Border: 'border border-emerald-400',
+            TextColor: 'text-emerald-400',
+            Glow: ''
+        },
+        'C': {
+            Color: 'bg-slate-500/10',
+            Shadow: 'shadow-none',
+            Border: 'border border-slate-500',
+            TextColor: 'text-slate-400',
+            Glow: ''
+        }
+    };
+
     const getRankConfig = (power: number) => {
         const rankConfigs = DataService.getInstance().getRankConfigs();
         if (!rankConfigs || rankConfigs.length === 0) {
             return {
                 Rank: 'C',
                 Threshold: 0,
-                Color: 'bg-slate-500/10',
-                Shadow: 'shadow-none',
-                Border: 'border-slate-500',
-                TextColor: 'text-slate-400',
-                Glow: ''
+                ...RANK_STYLES['C']
             };
         }
-        return rankConfigs.find(c => power >= c.Threshold) || rankConfigs[rankConfigs.length - 1];
+        const config = rankConfigs.find(c => power >= c.Threshold) || rankConfigs[rankConfigs.length - 1];
+        const style = RANK_STYLES[config.Rank] || RANK_STYLES['C'];
+        return { ...config, ...style };
     };
 
     const formatDamage = (damage: number, withUnit: boolean = true): string => {
@@ -166,7 +209,7 @@ export const ResultSection: React.FC = () => {
                     {/* Rank Badge - Dynamic Styles */}
                     <div className="mb-5">
                         <div className={clsx(
-                            'px-6 py-1 rounded-full border backdrop-blur-md transition-all duration-500',
+                            'px-6 py-1 rounded-full backdrop-blur-md transition-all duration-500',
                             currentRankConfig.Color,
                             currentRankConfig.Shadow,
                             currentRankConfig.Border,

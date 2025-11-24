@@ -11,7 +11,7 @@ export const Header: React.FC = () => {
                     </div>
                     <div>
                         <h1 className="text-xl md:text-2xl font-bold text-gradient tracking-tight">
-                            诛仙3战力计算器
+                            诛仙3副本战力计算器
                         </h1>
                         <p className="text-xs text-slate-400 font-mono tracking-wider">
                             V 2.0.1 | by 星耀-萝卜

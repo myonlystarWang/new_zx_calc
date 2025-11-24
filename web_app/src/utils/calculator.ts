@@ -1,4 +1,4 @@
-import { CharacterAttributes, Skill, Monster, Buff } from '../types';
+import type { CharacterAttributes, Skill, Monster, Buff } from '../types';
 
 interface DamageResult {
     minBaseDamage: number;
