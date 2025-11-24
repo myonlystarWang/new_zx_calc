@@ -35,6 +35,10 @@ export const AttributeCard: React.FC<AttributeCardProps> = ({
     const styles = colorStyles[color] || colorStyles.cyan;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.value === '') {
+            onChange(min > 0 ? min : 0);
+            return;
+        }
         const val = parseFloat(e.target.value);
         if (!isNaN(val) && val >= min && val <= max) {
             onChange(val);

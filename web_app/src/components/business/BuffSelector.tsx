@@ -35,6 +35,10 @@ export const BuffSelector: React.FC = () => {
         return effects.length > 0 ? effects.join(', ') : buff.BuffName;
     };
     const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>, buffId: string) => {
+        if (e.target.value === '') {
+            updateBuffValue(buffId, 0);
+            return;
+        }
         const val = parseFloat(e.target.value);
         if (!isNaN(val)) {
             updateBuffValue(buffId, val);
