@@ -15,9 +15,24 @@ interface AttributePanelProps {
 
 export const AttributePanel: React.FC<AttributePanelProps> = ({ attributes, onChange }) => {
     const handleChange = (key: keyof CharacterAttributes, value: number) => {
+        // 处理最小攻击和最大攻击的限制条件
+        let actualValue = value;
+
+        if (key === 'CharacterMinAttack') {
+            // 如果新的最小攻击大于当前最大攻击，则限制最小攻击为最大攻击的值
+            if (value > attributes.CharacterMaxAttack) {
+                actualValue = attributes.CharacterMaxAttack;
+            }
+        } else if (key === 'CharacterMaxAttack') {
+            // 如果新的最大攻击小于当前最小攻击，则限制最大攻击为最小攻击的值
+            if (value < attributes.CharacterMinAttack) {
+                actualValue = attributes.CharacterMinAttack;
+            }
+        }
+
         onChange({
             ...attributes,
-            [key]: value
+            [key]: actualValue
         });
     };
 
