@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useApp } from '../../context/AppContext';
 import { DataService } from '../../services/DataService';
 import { calculateDungeonPower, calculateTotalPower } from '../../utils/calculator';
-import { Trophy, Sparkles, Copy } from 'lucide-react';
+import { Trophy, Sparkles, Copy, Check } from 'lucide-react';
 import clsx from 'clsx';
 import { DungeonDetail } from './DungeonDetail';
 
@@ -121,9 +121,43 @@ export const ResultSection: React.FC = () => {
 
     const currentRankConfig = getRankConfig(results.totalPower);
 
-    const copyData = () => {
+    const [copied, setCopied] = useState(false);
+
+    const copyData = async () => {
         const text = `诛仙3战力: ${formatDamage(results.totalPower)} (${currentRankConfig.Rank}级)`;
-        navigator.clipboard.writeText(text);
+
+        try {
+            // Try modern Clipboard API first (requires secure context HTTPS or localhost)
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(text);
+            } else {
+                // Fallback for HTTP / Mobile / Older Browsers
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+
+                // Ensure it's not visible but part of DOM
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
+                textArea.style.top = "0";
+                textArea.setAttribute("readonly", "");
+
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textArea);
+
+                if (!successful) throw new Error('Copy failed');
+            }
+
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+            console.error('Copy failed:', err);
+            // Optional: Show an alert or toast on failure
+            // alert('复制失败，请手动复制');
+        }
     };
 
     const touchStartX = useRef<number>(0);
@@ -233,10 +267,15 @@ export const ResultSection: React.FC = () => {
 
                         <button
                             onClick={copyData}
-                            className="flex items-center gap-1.5 px-4 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 hover:border-cyan-500/50 rounded-full text-cyan-300 transition-all group"
+                            className={clsx(
+                                "flex items-center gap-1.5 px-4 py-1.5 rounded-full transition-all group border",
+                                copied
+                                    ? "bg-green-500/10 border-green-500/30 text-green-400"
+                                    : "bg-cyan-500/10 hover:bg-cyan-500/20 border-cyan-500/30 hover:border-cyan-500/50 text-cyan-300"
+                            )}
                         >
-                            <Copy className="w-3 h-3 group-hover:scale-110 transition-transform" />
-                            <span>复制战力数据</span>
+                            {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3 group-hover:scale-110 transition-transform" />}
+                            <span>{copied ? "已复制" : "复制战力数据"}</span>
                         </button>
                     </div>
                 </div>
