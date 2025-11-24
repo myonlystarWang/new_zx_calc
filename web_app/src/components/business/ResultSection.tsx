@@ -66,14 +66,14 @@ export const ResultSection: React.FC = () => {
 
     const formatDamage = (damage: number, withUnit: boolean = true): string => {
         if (damage >= 100000000) {
-            const value = (damage / 100000000).toFixed(2);
-            return withUnit ? `${value}亿` : value;
+            const value = (damage / 100000000).toFixed(3);
+            return withUnit ? `${value} 亿` : value;
         }
         if (damage >= 10000) {
-            const value = (damage / 10000).toFixed(2);
-            return withUnit ? `${value}万` : value;
+            const value = (damage / 10000).toFixed(3);
+            return withUnit ? `${value} 万` : value;
         }
-        return Math.round(damage).toString();
+        return Math.round(damage).toLocaleString();
     };
 
     const currentRankConfig = getRankConfig(results.totalPower);
@@ -159,7 +159,7 @@ export const ResultSection: React.FC = () => {
                     <div className="relative mb-3">
                         <div className="text-4xl sm:text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-cyan-50 to-cyan-200 tracking-tighter drop-shadow-2xl"
                             style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5))' }}>
-                            {Math.round(results.totalPower).toLocaleString()}
+                            {formatDamage(results.totalPower)}
                         </div>
                     </div>
 

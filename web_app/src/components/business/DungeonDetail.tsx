@@ -41,14 +41,14 @@ export const DungeonDetail = React.memo<DungeonDetailProps>(({
 
     const formatDamage = (damage: number, withUnit: boolean = true): string => {
         if (damage >= 100000000) {
-            const value = (damage / 100000000).toFixed(2);
+            const value = (damage / 100000000).toFixed(3);
             return withUnit ? `${value} 亿` : value;
         }
         if (damage >= 10000) {
-            const value = (damage / 10000).toFixed(2);
+            const value = (damage / 10000).toFixed(3);
             return withUnit ? `${value} 万` : value;
         }
-        return Math.round(damage).toString();
+        return Math.round(damage).toLocaleString();
     };
 
     const numberToChinese = (num: number): string => {
@@ -145,7 +145,7 @@ export const DungeonDetail = React.memo<DungeonDetailProps>(({
                                         "font-black text-xl md:text-2xl tracking-tighter leading-none",
                                         "text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-cyan-200 to-blue-300 drop-shadow-sm"
                                     )}>
-                                        {Math.round(power).toLocaleString()}
+                                        {formatDamage(power)}
                                     </span>
                                 </div>
                             </div>
