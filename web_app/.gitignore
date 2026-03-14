@@ -1,4 +1,4 @@
-# Logs
+# Logs - 各种日志文件
 logs
 *.log
 npm-debug.log*
@@ -7,19 +7,37 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependency directories - 依赖目录
 node_modules
 dist
 dist-ssr
 *.local
 
-# Editor directories and files
+# JavaScript/TypeScript - 缓存与测试
+.vite
+.cache
+.tsbuildinfo
+coverage
+
+# Environment variables - 环境变量（极其重要，防止泄露）
+.env
+.env.*
+!.env.example
+
+# Editor directories and files - 编辑器相关
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 *.zip
+
+# System files - 系统产生的文件
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+desktop.ini
