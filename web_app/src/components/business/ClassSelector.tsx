@@ -112,7 +112,8 @@ export const ClassSelector: React.FC = () => {
                                     .map(cls => {
                                         const isActive = userCharacter.ClassID === cls.ClassID;
                                         const skills = service.getSkills(cls.ClassID);
-                                        const isSupported = !!skills && Object.keys(skills).length > 0;
+                                        const isLocked = !!cls.isLocked;
+                                        const isSupported = !isLocked && !!skills && Object.keys(skills).length > 0;
 
                                         return (
                                             <div
@@ -144,7 +145,7 @@ export const ClassSelector: React.FC = () => {
 
                                                 {!isSupported && (
                                                     <span className="absolute top-2 right-2 text-[10px] bg-slate-800 text-slate-500 px-1.5 py-0.5 rounded border border-slate-700">
-                                                        未开放
+                                                        {isLocked ? '已锁定' : '未开放'}
                                                     </span>
                                                 )}
 

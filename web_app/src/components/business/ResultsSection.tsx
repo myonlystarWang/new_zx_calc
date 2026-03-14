@@ -5,6 +5,8 @@ import { calculateDungeonPower, calculateTotalPower } from '../../utils/calculat
 import { Trophy, Sparkles, Copy, Check } from 'lucide-react';
 import clsx from 'clsx';
 import { DungeonDetail } from './DungeonDetail';
+import { ActivationBanner } from './ActivationBanner';
+import { Lock } from 'lucide-react';
 
 export const ResultSection: React.FC = () => {
     const { userCharacter, activeBuffIds, buffs, buffValues } = useApp();
@@ -30,9 +32,10 @@ export const ResultSection: React.FC = () => {
             };
         });
 
+        const unlockedDungeons = dungeonPowers.filter(d => !d.isLocked);
         const totalPower = calculateTotalPower(
-            dungeonPowers.map(d => d.TotalDamage),
-            dungeonPowers.map(() => 1)
+            unlockedDungeons.map(d => d.TotalDamage),
+            unlockedDungeons.map(() => 1)
         );
 
         return {
@@ -213,6 +216,7 @@ export const ResultSection: React.FC = () => {
 
     return (
         <div className="flex flex-col gap-6">
+            <ActivationBanner />
             {/* Total Power Card - Compact & Fixed Styles */}
             <div className="glass-panel p-6 relative overflow-hidden bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 border-cyan-500/30">
                 {/* Background Decoration */}
@@ -311,6 +315,7 @@ export const ResultSection: React.FC = () => {
 
                             const rankConfig = getRankConfig(d.TotalDamage);
                             const powerRaw = d.TotalDamage;
+                            const isLocked = d.isLocked;
 
                             // Continuous Transform Logic
                             // X Position: 0 -> 60% -> +15% per step
@@ -351,8 +356,16 @@ export const ResultSection: React.FC = () => {
                                         isExpanded={isActive}
                                         standalone={true}
                                         rankConfig={rankConfig}
-                                        power={powerRaw}
+                                        power={isLocked ? undefined : powerRaw}
                                     />
+                                    {isLocked && (
+                                        <div className="absolute inset-0 z-[60] flex flex-col items-center justify-center bg-slate-950/60 backdrop-blur-[2px] rounded-2xl border border-white/5 pointer-events-none">
+                                            <div className="p-3 rounded-full bg-slate-900 shadow-xl border border-slate-700">
+                                                <Lock className="w-8 h-8 text-slate-500" />
+                                            </div>
+                                            <span className="mt-2 text-xs font-bold text-slate-400 tracking-widest uppercase">已锁定数据</span>
+                                        </div>
+                                    )}
                                 </div>
                             );
                         })}

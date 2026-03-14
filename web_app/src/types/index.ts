@@ -4,6 +4,8 @@ export interface CharacterClass {
   ClassName: string;
   Description: string;
   Race: string;
+  isPremium?: boolean;
+  isLocked?: boolean;
 }
 
 export interface CharacterAttributes {
@@ -50,6 +52,8 @@ export interface Skill {
   CastTime: number;
   IsAOE: boolean;
   SkillBonusAttributes: SkillBonusAttributes;
+  isPremium?: boolean;
+  isLocked?: boolean;
 }
 
 export interface ClassSkills {
@@ -74,6 +78,7 @@ export interface Monster {
   MonsterName: string;
   DungeonLevel: number;
   MonsterAttributeModifiers: MonsterAttributeModifiers;
+  isLocked?: boolean;
 }
 
 export interface Dungeon {
@@ -82,6 +87,8 @@ export interface Dungeon {
   Description?: string;
   difficulty?: string;
   Monsters: Monster[];
+  isPremium?: boolean;
+  isLocked?: boolean;
 }
 
 // Buffs

@@ -3,7 +3,7 @@ import { useApp } from '../../context/AppContext';
 import { DataService } from '../../services/DataService';
 import { calculateDamage } from '../../utils/calculator';
 import type { Dungeon, RankConfig, Skill } from '../../types';
-import { Sword, Info } from 'lucide-react';
+import { Sword, Info, Lock } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import clsx from 'clsx';
 
@@ -74,10 +74,10 @@ export const DungeonDetail = React.memo<DungeonDetailProps>(({
     const showContent = standalone || isExpanded;
     const selectedMonster = dungeon.Monsters.find(m => m.MonsterID === selectedMonsterId) || dungeon.Monsters[0];
 
-    // Pre-calculate damages for the selected monster
     const skillDamages = selectedMonster ? skills.map(skill => {
+        const isSkillLocked = skill.isLocked || selectedMonster.isLocked;
         const dmg = calculateDamage(userCharacter.BaseAttributes, skill, selectedMonster, activeBuffs, buffValues);
-        return { skill, dmg };
+        return { skill, dmg, isSkillLocked };
     }).sort((a, b) => b.skill.SkillImportanceWeight - a.skill.SkillImportanceWeight) : [];
 
     const maxAvgDamage = skillDamages.length > 0 ? Math.max(...skillDamages.map(s => s.dmg.avgFinalDamage)) : 0;
@@ -240,7 +240,7 @@ export const DungeonDetail = React.memo<DungeonDetailProps>(({
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-slate-700/30">
-                                            {skillDamages.map(({ skill, dmg }) => {
+                                            {skillDamages.map(({ skill, dmg, isSkillLocked }) => {
                                                 const barWidth = maxAvgDamage > 0 ? (dmg.avgFinalDamage / maxAvgDamage) * 100 : 0;
 
                                                 return (
@@ -248,6 +248,7 @@ export const DungeonDetail = React.memo<DungeonDetailProps>(({
                                                         <td className="py-3 px-2 text-slate-200 font-medium relative z-10 whitespace-nowrap">
                                                             <div className="flex items-center gap-2 relative">
                                                                 <span>{skill.SkillName}</span>
+                                                                {isSkillLocked && <Lock className="w-3 h-3 text-slate-500" />}
                                                                 <Info 
                                                                     className="w-4 h-4 text-slate-500 hover:text-cyan-400 cursor-pointer transition-colors"
                                                                     onMouseEnter={(e) => {
@@ -262,9 +263,15 @@ export const DungeonDetail = React.memo<DungeonDetailProps>(({
                                                                 />
                                                             </div>
                                                             <div className="text-xs md:text-sm text-slate-400 mt-1 font-mono flex items-center gap-1.5">
-                                                                <span className="text-cyan-400 font-semibold">{formatDamage(dmg.minFinalDamage, false)}</span>
-                                                                <span className="text-slate-500">~</span>
-                                                                <span className="text-purple-400 font-semibold">{formatDamage(dmg.maxFinalDamage)}</span>
+                                                                {isSkillLocked ? (
+                                                                    <span className="text-slate-600 italic">数值已锁定</span>
+                                                                ) : (
+                                                                    <>
+                                                                        <span className="text-cyan-400 font-semibold">{formatDamage(dmg.minFinalDamage, false)}</span>
+                                                                        <span className="text-slate-500">~</span>
+                                                                        <span className="text-purple-400 font-semibold">{formatDamage(dmg.maxFinalDamage)}</span>
+                                                                    </>
+                                                                )}
                                                             </div>
                                                         </td>
                                                         <td className="hidden py-3 px-2 text-right text-cyan-300 font-mono text-sm font-medium relative z-10 whitespace-nowrap">
@@ -276,11 +283,17 @@ export const DungeonDetail = React.memo<DungeonDetailProps>(({
                                                         <td className="py-3 px-2 text-right relative">
                                                             {/* Damage Bar Background */}
                                                             <div
-                                                                className="absolute inset-y-1 right-1 bg-yellow-500/20 rounded-sm transition-all duration-500"
+                                                                className={clsx(
+                                                                    "absolute inset-y-1 right-1 rounded-sm transition-all duration-500",
+                                                                    isSkillLocked ? "bg-slate-700/20" : "bg-yellow-500/20"
+                                                                )}
                                                                 style={{ width: `${barWidth * 0.95}%` }}
                                                             />
-                                                            <span className="relative z-10 text-yellow-300 font-mono font-bold text-sm md:text-base shadow-black drop-shadow-sm whitespace-nowrap">
-                                                                {formatDamage(dmg.avgFinalDamage)}
+                                                            <span className={clsx(
+                                                                "relative z-10 font-mono font-bold text-sm md:text-base shadow-black drop-shadow-sm whitespace-nowrap",
+                                                                isSkillLocked ? "text-slate-600" : "text-yellow-300"
+                                                            )}>
+                                                                {isSkillLocked ? "---" : formatDamage(dmg.avgFinalDamage)}
                                                             </span>
                                                         </td>
                                                     </tr>

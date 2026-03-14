@@ -10,6 +10,8 @@ interface AppState {
     activeBuffIds: string[];
     buffValues: Record<string, number>;
     selectedDungeonId: string | null;
+    vipCode: string;
+    vipStatus: 'free' | 'premium' | 'invalid';
 }
 
 interface AppContextType extends AppState {
@@ -18,6 +20,7 @@ interface AppContextType extends AppState {
     toggleBuff: (buffId: string) => void;
     updateBuffValue: (buffId: string, value: number) => void;
     selectDungeon: (dungeonId: string) => void;
+    activateVip: (code: string) => Promise<boolean>;
 }
 
 const defaultAttributes: CharacterAttributes = {
@@ -63,32 +66,61 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     });
 
     const [selectedDungeonId, setSelectedDungeonId] = useState<string | null>(null);
+    const [vipCode, setVipCode] = useState<string>(() => localStorage.getItem('zx_vip_code') || '');
+    const [vipStatus, setVipStatus] = useState<'free' | 'premium' | 'invalid'>('free');
 
-    useEffect(() => {
-        const initData = async () => {
-            const service = DataService.getInstance();
-            await service.loadAllData();
-            const loadedBuffs = service.getBuffs();
+    const initData = async (codeToUse?: string) => {
+        setIsLoading(true);
+        const service = DataService.getInstance();
+        
+        try {
+            const currentCode = codeToUse !== undefined ? codeToUse : vipCode;
+            const { status, version } = await service.loadAllData(currentCode);
+            
+            // 版本校验：如果版本变了，清理旧的数据缓存（但不清理用户属性）
+            const lastVersion = localStorage.getItem('zx_data_version');
+            const shouldResetDataCache = !!(lastVersion && lastVersion !== version);
+            if (shouldResetDataCache) {
+                console.log(`Version change: ${lastVersion} -> ${version}. Flushing data cache.`);
+                // 只清理数据相关的缓存，保留用户配置
+                localStorage.removeItem('zx_active_buffs');
+                localStorage.removeItem('zx_buff_values');
+                setActiveBuffIds([]);
+                setBuffValues({});
+                // 强制角色合法性检查（可选）
+            }
+            localStorage.setItem('zx_data_version', version);
+
+            setVipStatus(status as any);
             setClasses(service.getClasses());
+            const loadedBuffs = service.getBuffs();
             setBuffs(loadedBuffs);
 
+            const baseActiveBuffIds = shouldResetDataCache ? [] : activeBuffIds;
+            const baseBuffValues = shouldResetDataCache ? {} : buffValues;
+
             // Set default buffs if empty
-            if (activeBuffIds.length === 0) {
+            if (baseActiveBuffIds.length === 0) {
                 const defaults = loadedBuffs.filter(b => b.IsDefaultActive).map(b => b.BuffID);
                 setActiveBuffIds(defaults);
             }
 
             // Initialize buff values if empty
-            if (Object.keys(buffValues).length === 0) {
+            if (Object.keys(baseBuffValues).length === 0) {
                 const initialValues: Record<string, number> = {};
                 loadedBuffs.forEach(b => {
                     initialValues[b.BuffID] = b.DefaultEffectValue ?? 0;
                 });
                 setBuffValues(initialValues);
             }
-
+        } catch (error) {
+            console.error('Init failure:', error);
+        } finally {
             setIsLoading(false);
-        };
+        }
+    };
+
+    useEffect(() => {
         initData();
     }, []);
 
@@ -103,6 +135,24 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     useEffect(() => {
         localStorage.setItem('zx_buff_values', JSON.stringify(buffValues));
     }, [buffValues]);
+
+    useEffect(() => {
+        localStorage.setItem('zx_vip_code', vipCode);
+    }, [vipCode]);
+
+    const activateVip = async (code: string): Promise<boolean> => {
+        const cleanCode = code.trim();
+        await initData(cleanCode);
+        
+        const service = DataService.getInstance();
+        const finalStatus = service.getStatus();
+        
+        if (finalStatus === 'premium') {
+            setVipCode(cleanCode);
+            return true;
+        }
+        return false;
+    };
 
     const updateCharacterAttributes = (attrs: CharacterAttributes) => {
         setUserCharacter(prev => ({
@@ -145,11 +195,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             activeBuffIds,
             buffValues,
             selectedDungeonId,
+            vipCode,
+            vipStatus,
             updateCharacterAttributes,
             updateCharacterClass,
             toggleBuff,
             updateBuffValue,
-            selectDungeon
+            selectDungeon,
+            activateVip
         }}>
             {children}
         </AppContext.Provider>

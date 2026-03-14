@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "dev:full": "npm run build && wrangler pages dev ./dist --local --compatibility-flags=nodejs_compat --binding VIP_CODES=\"test1\"",
+    "deploy": "npm run build && wrangler pages deploy dist",
+    "postbuild": "cp -r functions dist/",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -17,6 +20,7 @@
     "recharts": "^3.4.1"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260313.1",
     "@eslint/js": "^9.39.1",
     "@types/node": "^24.10.0",
     "@types/react": "^19.2.2",
@@ -29,8 +33,10 @@
     "globals": "^16.5.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.0",
+    "tsx": "^4.21.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.3",
-    "vite": "^5.4.0"
+    "vite": "^5.4.0",
+    "wrangler": "^4.73.0"
   }
 }

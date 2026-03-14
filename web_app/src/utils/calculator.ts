@@ -15,6 +15,18 @@ export const calculateDamage = (
     activeBuffs: Buff[],
     buffValues: Record<string, number> = {}
 ): DamageResult => {
+    const defaultResult = {
+        minBaseDamage: 0,
+        maxBaseDamage: 0,
+        minFinalDamage: 0,
+        maxFinalDamage: 0,
+        avgFinalDamage: 0
+    };
+
+    // 0. 权限防御：若技能或怪兽被锁定，则不进行计算
+    if (skill.isLocked || monster.isLocked) {
+        return defaultResult;
+    }
     // 1. Aggregate Buff Effects
     let buffAttackPercent = 0;
     let buffAttackFixed = 0;
@@ -178,9 +190,16 @@ export const calculateMonsterPower = (
 
     let totalPower = 0;
 
+    // 0. 权限防御：若副本被锁定，则不进行计算
+    if (monster.isLocked) return 0;
+
     skills.forEach(skill => {
+        if (skill.isLocked) return;
+        const weight = Number(skill.SkillImportanceWeight ?? 0);
+        if (!Number.isFinite(weight) || weight <= 0) return;
         const damage = calculateDamage(character, skill, monster, activeBuffs, buffValues);
-        totalPower += damage.avgFinalDamage * skill.SkillImportanceWeight;
+        if (!Number.isFinite(damage.avgFinalDamage)) return;
+        totalPower += damage.avgFinalDamage * weight;
     });
 
     return totalPower;

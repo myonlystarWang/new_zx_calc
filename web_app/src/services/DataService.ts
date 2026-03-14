@@ -7,17 +7,20 @@ import type {
     RankConfig
 } from '../types';
 
-const DATA_BASE_URL = '/game_data';
+const API_URL = '/api/getData';
 
 export class DataService {
     private static instance: DataService;
 
     private classes: CharacterClass[] | null = null;
     private skills: AllSkills | null = null;
-    private dungeonsMetadata: any[] | null = null; // Raw dungeons.json
+    private dungeonsMetadata: any[] | null = null;
     private dungeonsMonsters: Record<string, Monster[]> | null = null;
     private buffs: Buff[] | null = null;
     private rankConfigs: RankConfig[] | null = null;
+
+    private status: 'free' | 'premium' | 'invalid' = 'free';
+    private version: string = '';
 
     private constructor() { }
 
@@ -28,44 +31,44 @@ export class DataService {
         return DataService.instance;
     }
 
-    public async loadAllData(): Promise<void> {
-        await Promise.all([
-            this.loadClasses(),
-            this.loadSkills(),
-            this.loadDungeons(),
-            this.loadBuffs(),
-            this.loadRankConfigs()
-        ]);
+    /**
+     * 从后端 API 加载聚合后的全量数据
+     * @param vipCode 可选的卡密
+     */
+    public async loadAllData(vipCode?: string): Promise<{ status: string; version: string }> {
+        const headers: Record<string, string> = {
+            'Content-Type': 'application/json'
+        };
+        if (vipCode) {
+            headers['X-VIP-Code'] = vipCode.trim();
+        }
+
+        try {
+            const response = await fetch(API_URL, { headers });
+            if (!response.ok) throw new Error(`API Error: ${response.status}`);
+            
+            const result = await response.json();
+            const { data, status, version } = result;
+
+            this.classes = data.classes;
+            this.skills = data.skills;
+            this.dungeonsMetadata = data.dungeons;
+            this.dungeonsMonsters = data.dungeons_monsters;
+            this.buffs = data.combat_buffs;
+            this.rankConfigs = data.rank_config;
+            this.status = status;
+            this.version = version;
+
+            return { status, version };
+        } catch (error) {
+            console.error('Failed to load data:', error);
+            // 这里可以考虑注入极简的内置兜底数据，或者抛出异常由 UI 处理
+            throw error;
+        }
     }
 
-    private async loadClasses(): Promise<void> {
-        const response = await fetch(`${DATA_BASE_URL}/classes.json`);
-        this.classes = await response.json();
-    }
-
-    private async loadSkills(): Promise<void> {
-        const response = await fetch(`${DATA_BASE_URL}/skills.json`);
-        this.skills = await response.json();
-    }
-
-    private async loadDungeons(): Promise<void> {
-        const [metaResponse, monstersResponse] = await Promise.all([
-            fetch(`${DATA_BASE_URL}/dungeons.json`),
-            fetch(`${DATA_BASE_URL}/dungeons_monsters.json`)
-        ]);
-        this.dungeonsMetadata = await metaResponse.json();
-        this.dungeonsMonsters = await monstersResponse.json();
-    }
-
-    private async loadBuffs(): Promise<void> {
-        const response = await fetch(`${DATA_BASE_URL}/combat_buffs.json`);
-        this.buffs = await response.json();
-    }
-
-    private async loadRankConfigs(): Promise<void> {
-        const response = await fetch(`${DATA_BASE_URL}/rank_config.json`);
-        this.rankConfigs = await response.json();
-    }
+    public getStatus() { return this.status; }
+    public getVersion() { return this.version; }
 
     public getClasses(): CharacterClass[] {
         return this.classes || [];

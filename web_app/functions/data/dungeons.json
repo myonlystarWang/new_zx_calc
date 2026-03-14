@@ -49,7 +49,8 @@
     "DungeonName": "试炼·四象五行（七杀罪狱）",
     "Description": "与四象之力相关的试炼之地，可获取幻灵石礼包、混沌石、覆天石、覆天印等高级奖励。",
     "difficulty": "难",
-    "DungeonImportanceWeight": 1
+    "DungeonImportanceWeight": 1,
+    "isPremium": true
   },
   {
     "DungeonID": "TIANDI_BAOKU_NORMAL",

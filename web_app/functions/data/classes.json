@@ -117,7 +117,8 @@
     "ClassID": "GUI_YUN",
     "ClassName": "归云",
     "Description": "人族远程法师，以伞为武器，技能飘逸灵动，擅长范围伤害和控制。",
-    "Race": "天脉"
+    "Race": "天脉",
+    "isPremium": true
   },
   {
     "ClassID": "SHI_LUO",
@@ -135,7 +136,8 @@
     "ClassID": "NIE_YU",
     "ClassName": "涅羽",
     "Description": "承千年诅咒，负惊天之秘；以夜凰为祖，凭驭心为业。毒刃无形，残羽留踪，拥有强大的近战爆发和控制能力",
-    "Race": "苍祇"
+    "Race": "苍祇",
+    "isPremium": true
   },
   {
     "ClassID": "ZHU_SHUANG",
@@ -147,7 +149,8 @@
     "ClassID": "JING_LAN",
     "ClassName": "惊岚",
     "Description": "擅驭风之术，捻黑火仙诀，执三尺长刀。于三界内，快意恩仇，斩断一切不平之事，具备高机动性和爆发输出能力",
-    "Race": "苍祇"
+    "Race": "苍祇",
+    "isPremium": true
   },
   {
     "ClassID": "ZHAO_MING",
