@@ -13,7 +13,8 @@ export const calculateDamage = (
     skill: Skill,
     monster: Monster,
     activeBuffs: Buff[],
-    buffValues: Record<string, number> = {}
+    buffValues: Record<string, number> = {},
+    dungeonName?: string
 ): DamageResult => {
     const defaultResult = {
         minBaseDamage: 0,
@@ -27,6 +28,14 @@ export const calculateDamage = (
     if (skill.isLocked || monster.isLocked) {
         return defaultResult;
     }
+    // 1. 获取调试开关（支持控制台动态开启）
+    const debugMonster = typeof window !== 'undefined' ? (window as any).DEBUG_MONSTER : null;
+
+    // 2. 采样日志：每隔一段时间打印一下当前正在计算的 Boss 名，确保数据对齐
+    if (Math.random() < 0.05) { // 提高到 5% 概率，方便观察
+        console.log(`[调试采样] 正在计算: "${monster.MonsterName}" (如果您想观察它，请设置 window.DEBUG_MONSTER = "${monster.MonsterName}")`);
+    }
+
     // 1. Aggregate Buff Effects
     let buffAttackPercent = 0;
     let buffAttackFixed = 0;
@@ -165,6 +174,29 @@ export const calculateDamage = (
     const minFinalDamage = minBaseDamage * finalMultipliers;
     const maxFinalDamage = maxBaseDamage * finalMultipliers;
 
+    // // 计算仅包含爆伤的基础结果（不乘其他系数）
+    // const critBaseMin = minBaseDamage * critMultiplier;
+    // const critBaseMax = maxBaseDamage * critMultiplier;
+
+    // 动态过滤打印：只有在控制台手动设置 window.DEBUG_MONSTER === monster.MonsterName 时才打印，避免所有 Boss 全量打印导致浏览器卡死
+    const shouldLog = debugMonster && typeof debugMonster === 'string' &&
+        debugMonster.trim() === monster.MonsterName.trim();
+
+    if (shouldLog) {
+        console.log(`[计算详情] 副本: ${dungeonName || '未知'} | 技能: ${skill.SkillName} -> 目标: ${monster.MonsterName}`);
+        console.log(`  基础攻击(小/大): ${effMinAttack.toFixed(2)} / ${effMaxAttack.toFixed(2)}`);
+        console.log(`  基础伤害(小/大): ${minBaseDamage.toFixed(2)} / ${maxBaseDamage.toFixed(2)}`);
+        // console.log(`  爆击基础伤害(基础*爆伤): ${critBaseMin.toFixed(0)} / ${critBaseMax.toFixed(0)}`);
+        console.log(`  爆伤系数 (critMultiplier): ${critMultiplier.toFixed(4)} (总爆伤: ${critDmgTotal}%)`);
+        console.log(`  技能增伤系数 (damageBonusMultiplier): ${damageBonusMultiplier.toFixed(4)}`);
+        console.log(`  对怪伤害增加 (charMonDmgInc): ${charMonDmgInc.toFixed(4)}`);
+        console.log(`  目标受伤害增加 (monHarmedMultiplier): ${monHarmedMultiplier.toFixed(4)}`);
+        console.log(`  专注倍数 (focusMultiplier): ${focusMultiplier.toFixed(4)}`);
+        console.log(`  天罚倍数 (holyWrathMultiplier): ${holyWrathMultiplier.toFixed(4)}`);
+        console.log(`  最终综合倍数: ${finalMultipliers.toFixed(4)}`);
+        console.log(`  >> 最终伤害(小/大/均): ${minFinalDamage.toFixed(0)} / ${maxFinalDamage.toFixed(0)} / ${((minFinalDamage + maxFinalDamage) / 2).toFixed(0)}`);
+    }
+
     return {
         minBaseDamage,
         maxBaseDamage,
@@ -179,7 +211,8 @@ export const calculateMonsterPower = (
     skills: Skill[],
     monster: Monster,
     activeBuffs: Buff[],
-    buffValues: Record<string, number> = {}
+    buffValues: Record<string, number> = {},
+    dungeonName?: string
 ): number => {
     // Formula: Σ(SkillAvgDamage * SkillWeight)
     // Note: The doc says "SkillWeight" (SkillImportanceWeight).
@@ -197,7 +230,7 @@ export const calculateMonsterPower = (
         if (skill.isLocked) return;
         const weight = Number(skill.SkillImportanceWeight ?? 0);
         if (!Number.isFinite(weight) || weight <= 0) return;
-        const damage = calculateDamage(character, skill, monster, activeBuffs, buffValues);
+        const damage = calculateDamage(character, skill, monster, activeBuffs, buffValues, dungeonName);
         if (!Number.isFinite(damage.avgFinalDamage)) return;
         totalPower += damage.avgFinalDamage * weight;
     });
@@ -210,14 +243,15 @@ export const calculateDungeonPower = (
     skills: Skill[],
     monsters: Monster[],
     activeBuffs: Buff[],
-    buffValues: Record<string, number> = {}
+    buffValues: Record<string, number> = {},
+    dungeonName?: string
 ): number => {
     // Formula: Avg(MonsterPower)
     if (monsters.length === 0) return 0;
 
     let totalMonsterPower = 0;
     monsters.forEach(monster => {
-        totalMonsterPower += calculateMonsterPower(character, skills, monster, activeBuffs, buffValues);
+        totalMonsterPower += calculateMonsterPower(character, skills, monster, activeBuffs, buffValues, dungeonName);
     });
 
     return totalMonsterPower / monsters.length;

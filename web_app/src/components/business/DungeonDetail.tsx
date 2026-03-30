@@ -76,7 +76,7 @@ export const DungeonDetail = React.memo<DungeonDetailProps>(({
 
     const skillDamages = selectedMonster ? skills.map(skill => {
         const isSkillLocked = skill.isLocked || selectedMonster.isLocked;
-        const dmg = calculateDamage(userCharacter.BaseAttributes, skill, selectedMonster, activeBuffs, buffValues);
+        const dmg = calculateDamage(userCharacter.BaseAttributes, skill, selectedMonster, activeBuffs, buffValues, dungeon.DungeonName);
         return { skill, dmg, isSkillLocked };
     }).sort((a, b) => b.skill.SkillImportanceWeight - a.skill.SkillImportanceWeight) : [];
 

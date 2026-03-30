@@ -24,7 +24,8 @@ export const ResultSection: React.FC = () => {
                 skills,
                 dungeon.Monsters,
                 activeBuffs,
-                buffValues
+                buffValues,
+                dungeon.DungeonName
             );
             return {
                 ...dungeon,
